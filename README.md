@@ -27,6 +27,15 @@ Elkeid HUB is a rule/event processing engine maintained by the Elkeid Team that 
 * 99% alarm produce time is less than 0.5s
 * Internal Maintenance Rules 2000+
 
+## Install and deploy
+waiting for update
+
+## Getting Started
+waiting for update
+
+## Elkeid HUB Handbook (chinese only)
+waiting for update
+
 ## Community Version
 * Does not support cluster mode, only supports single node.
 * No front-end support, no data visualization capabilities, no front-end management capabilities.

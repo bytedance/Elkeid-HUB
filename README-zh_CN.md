@@ -33,6 +33,15 @@ Elkeid HUB 是一款由 Elkeid Team 维护的事规则/事件处理引擎，支�
 * 不支持 WorkSpace，不支持用户管理
 * 无运维管理能力
 
+## Install and deploy
+waiting for update
+
+## Getting Started
+waiting for update
+
+## Elkeid HUB Handbook (chinese only)
+waiting for update
+
 ## LICENSE (Not Business Friendly)
 [LICENSE](LICENSE)
 
