@@ -48,7 +48,7 @@ waiting for update
 waiting for update
 
 ## Elkeid HUB Handbook (chinese only)
-waiting for update
+[Handbook](handbook/handbook.md)
 
 ## LICENSE (Not Business Friendly)
 [LICENSE](LICENSE)

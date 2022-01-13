@@ -42,7 +42,7 @@ waiting for update
 waiting for update
 
 ## Elkeid HUB Handbook (chinese only)
-waiting for update
+[Handbook](handbook/handbook.md)
 
 ## Community Version
 * Does not support cluster mode, only supports single node.
