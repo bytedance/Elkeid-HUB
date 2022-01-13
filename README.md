@@ -7,12 +7,20 @@ Elkeid HUB is a rule/event processing engine maintained by the Elkeid Team that 
 * `INPUT` data input layer, community edition only supports Kafka.
 * `RULEENGINE/RULESET` core components for data detection/external data linkage/data processing.
 * `OUTPUT` data output layer, community edition only supports Kafka/ES.
-* `SMITH-DSL` used to describe the data flow relationship.
+* `SMITH_DSL` used to describe the data flow relationship.
 
 
 ## Application Scenarios
 
-<img src="example.png"/>
+* Simple HIDS
+<img src="example_hids.png"/>
+
+* IDS Like Scenarios
+<img src="example_ids.png"/>
+
+* Multiple input and output scenarios
+<img src="example_complex.png"/>
+
 
 ## Advantage
 * High Performance

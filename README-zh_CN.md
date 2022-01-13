@@ -6,12 +6,20 @@ Elkeid HUB 是一款由 Elkeid Team 维护的事规则/事件处理引擎，支�
 * `INPUT` 数据输入层，社区版仅支持Kafka
 * `RULEENGINE/RULESET` 对数据进行检测/外部数据联动/数据处理的核心组件
 * `OUTPUT` 数据输出层，社区版仅支持Kafka/ES
-* `SMITH-DSL` 用来描述数据流转关系
+* `SMITH_DSL` 用来描述数据流转关系
 
 
 ## Application Scenarios
 
-<img src="example.png"/>
+* Simple HIDS
+<img src="example_hids.png"/>
+
+* IDS Like Scenarios
+<img src="example_ids.png"/>
+
+* Multiple input and output scenarios
+<img src="example_complex.png"/>
+
 
 ## Advantage
 * 高性能
