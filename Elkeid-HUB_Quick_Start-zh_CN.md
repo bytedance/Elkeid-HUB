@@ -14,11 +14,8 @@ HUB自身能够连通Input/Output中所用到的**ES/Kafka**
 
 ```Shell
 mkdir -p ~/elkeid && cd ~/elkeid
-
 curl https://lf3-elkeid.bytetos.com/obj/elkeid-download/elkeid_hub_community_v1.0.zip
-
 unzip elkeid_hub_community.zip
-
 cd elkeid_hub_community
 ```
 
@@ -40,27 +37,16 @@ config目录包含了提供的默认Project，包含一个input和一个output�
 
 ```YAML
 InputID: hids                              #Input的id
-
 InputName: hids
-
 InputType: kafka                            #目前仅支持kafka
-
 DataType: json                              #也支持自定义格式
-
 KafkaBootstrapServers: 127.0.0.1:9092       #kafka地址 运行前务必修改为真实kafka地址
-
 KafkaGroupId: lch_test1                     #consumer group id
-
 KafkaOffsetReset: earliest                        
-
 KafkaCompression: none
-
 KafkaTopics:
-
   - hids_svr                                   #kafka topic,可以填写多个topic
-
 KafkaOtherConf: ~
-
 KafkaWorkerSize: 1
 ```
 
@@ -68,17 +54,11 @@ KafkaWorkerSize: 1
 
 ```YAML
 OutputID: test
-
 OutputName: test
-
 OutputType: kafka
-
 KafkaBootstrapServers: 127.0.0.1:9092       #kafka地址 运行前务必修改为真实kafka地址
-
 KafkaTopics: res1                           #输出的topic
-
 AddTimestamp: true
-
 KafkaOtherConf: ~
 ```
 
@@ -90,13 +70,9 @@ KafkaOtherConf: ~
 
 ```Makefile
 ProjectID: test
-
 ProjectName: test
-
 SmithDSL: |
-
           INPUT.hids --> RULESET.test
-
           RULESET.test --> OUTPUT.test      #这里详情可以参看手册中第8章project
 ```
 
