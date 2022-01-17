@@ -1,3 +1,5 @@
+English | [简体中文](Elkeid-HUB_Quick_Start-zh_CN.md)
+
 ## Elkeid-HUB Quick Start
 
 ### System Requirements

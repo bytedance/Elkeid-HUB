@@ -1,4 +1,4 @@
-##  [Elkeid-HUB_Quick_Start-zh_CN.md](Elkeid-HUB_Quick_Start-zh_CN.md) Elkeid-HUB Quick Start
+## Elkeid-HUB Quick Start
 
 ### 系统要求
 
