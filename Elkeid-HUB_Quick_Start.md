@@ -16,11 +16,8 @@ HUB Compressed package contains the HUB binary file, runtime dependencies, runti
 
 ```Shell
 mkdir -p ~/elkeid && cd ~/elkeid
-
 curl https://github.com/bytedance/Elkeid-HUB/releases/download/1.0/elkeid_hub_community_v1.0.zip
-
 unzip elkeid_hub_community.zip
-
 cd elkeid_hub_community
 ```
 
@@ -42,27 +39,16 @@ The following is a brief introduction to the configuration. For details of the s
 
 ```YAML
 InputID: hids                              #Inputid
-
 InputName: hids
-
 InputType: kafka                            #currently supports Kafka only
-
 DataType: json                              #also support custom datatype
-
 KafkaBootstrapServers: 127.0.0.1:9092       #Must be changed to the real kafka address before running
-
 KafkaGroupId: lch_test1                     #consumer group id
-
 KafkaOffsetReset: earliest                        
-
 KafkaCompression: none
-
 KafkaTopics:
-
   - hids_svr                                   #you can fill in multiple topics
-
 KafkaOtherConf: ~
-
 KafkaWorkerSize: 1
 ```
 
@@ -70,17 +56,11 @@ KafkaWorkerSize: 1
 
 ```YAML
 OutputID: test
-
 OutputName: test
-
 OutputType: kafka
-
 KafkaBootstrapServers: 127.0.0.1:9092       #Must be changed to the real kafka address before running
-
 KafkaTopics: res1                           # output topic
-
 AddTimestamp: true
-
 KafkaOtherConf: ~
 ```
 
@@ -92,13 +72,9 @@ This project implements simple input from input, through test Ruleset to output,
 
 ```Makefile
 ProjectID: test
-
 ProjectName: test
-
 SmithDSL: |
-
           INPUT.hids --> RULESET.test
-
           RULESET.test --> OUTPUT.test      #For details, please refer to Chapter 8 project in the handbook
 ```
 
