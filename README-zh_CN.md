@@ -43,7 +43,7 @@ Elkeid HUB 是一款由 Elkeid Team 维护的事规则/事件处理引擎，支�
 
 
 ## Getting Started
-waiting for update
+[Elkeid-HUB Quick Start](Elkeid-HUB_Quick_Start.md)
 
 ## Elkeid HUB Handbook (chinese only)
 [Handbook](handbook/handbook.md)
