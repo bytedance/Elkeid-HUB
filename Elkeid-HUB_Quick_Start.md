@@ -17,7 +17,7 @@ HUB Compressed package contains the HUB binary file, runtime dependencies, runti
 ```Shell
 mkdir -p ~/elkeid && cd ~/elkeid
 
-curl http://tosv.byted.org/obj/agentsmith-hub-testing/elkeid_hub_community.zip -o elkeid_hub_community.zip
+curl https://github.com/bytedance/Elkeid-HUB/releases/download/1.0/elkeid_hub_community_v1.0.zip
 
 unzip elkeid_hub_community.zip
 
