@@ -14,8 +14,8 @@ HUB自身能够连通Input/Output中所用到的**ES/Kafka**
 
 ```Shell
 mkdir -p ~/elkeid && cd ~/elkeid
-curl https://lf3-elkeid.bytetos.com/obj/elkeid-download/elkeid_hub_community_v1.0.zip
-unzip elkeid_hub_community.zip
+wget https://github.com/bytedance/Elkeid-HUB/releases/download/v1.0/elkeid_hub_community_v1.0.zip
+unzip elkeid_hub_community_v1.0.zip
 cd elkeid_hub_community
 ```
 
