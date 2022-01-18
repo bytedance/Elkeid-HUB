@@ -48,9 +48,16 @@ Elkeid HUB 是一款由 Elkeid Team 维护的事规则/事件处理引擎，支�
 [Elkeid-HUB Demo(Chinese version only)](demo.md)
 
 
-
 ## Elkeid HUB Handbook (Chinese version only)
 [Handbook](handbook/handbook.md)
+
+## Demo Config
+[Demo](config/demo)
+
+## Elkeid HIDS Rule and Project(Just Example)
+[Elkeid Project](config/elkeid_hids)
+
+(Need to use with [Elkeid](https://github.com/bytedance/Elkeid))
 
 ## LICENSE (Not Business Friendly)
 [LICENSE](LICENSE)

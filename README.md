@@ -44,6 +44,14 @@ Elkeid HUB is a rule/event processing engine maintained by the Elkeid Team that 
 ## Elkeid HUB Handbook (chinese only)
 [Handbook](handbook/handbook.md)
 
+## Demo Config
+[Demo](config/demo)
+
+## Elkeid HIDS Rule and Project(Just Example)
+[Elkeid Project](config/elkeid_hids)
+
+(Need to use with [Elkeid](https://github.com/bytedance/Elkeid))
+
 ## Community Version
 * Does not support cluster mode, only supports single node.
 * No front-end support, no data visualization capabilities, no front-end management capabilities.
