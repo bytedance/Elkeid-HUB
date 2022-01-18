@@ -673,7 +673,7 @@ count_type为空时默认计算次数，**当为classify时计算的是类型，
 如果我们想对该数据增加一个字段：data_type_copy:10(来源于数据中的data_type字段)，那么我们可以按以下方式编写：
 
 ```XML
-<append type="field" rely_part="data_type"></append>
+<append type="field" rely_part="data_type" append_field_name="data_type_copy"></append>
 ```
 
 ###### 6.2.7.3 append之CUSTOM
