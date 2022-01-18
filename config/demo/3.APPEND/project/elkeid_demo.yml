@@ -1,0 +1,6 @@
+ProjectID: elkeid_demo
+ProjectName: elkeid_demo
+SmithDSL: |
+  INPUT.demo --> RULESET.demo_load_lvm
+  RULESET.demo_load_lvm --> RULESET.push_alert
+  RULESET.push_alert --> OUTPUT.result

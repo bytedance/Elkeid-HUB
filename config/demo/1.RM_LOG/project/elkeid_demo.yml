@@ -1,0 +1,5 @@
+ProjectID: elkeid_demo
+ProjectName: elkeid_demo
+SmithDSL: |
+  INPUT.demo --> RULESET.demo_rm_log
+  RULESET.demo_rm_log --> OUTPUT.result

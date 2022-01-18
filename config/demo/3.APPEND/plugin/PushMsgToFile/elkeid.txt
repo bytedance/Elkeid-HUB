@@ -1,0 +1,6 @@
+[plugin]
+name = PushMsgToFile
+type = Action
+description = PushMsgToFile
+runtime = Python
+author = matao_mt94

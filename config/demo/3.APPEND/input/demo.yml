@@ -1,0 +1,7 @@
+InputID: demo
+InputName: demo
+InputType: mock_from_files
+DataType: json
+MockFromFiles: 
+  - demo/3.APPEND/input/input_demo.json
+MockFromFilesRepeat: 1

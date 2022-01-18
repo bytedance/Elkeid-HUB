@@ -1,0 +1,16 @@
+<root ruleset_id="demo_rm_log" ruleset_name="demo_rm_log" type="Rule" undetected_discard="true">
+    <rule rule_id="DEMO_RM_LOG_001" type="Detection" author="elkeid_group">
+        <rule_name>DEMO_RM_LOG_001</rule_name>
+        <harm_level>critical</harm_level>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node part="argv" type="INCL" check_data_type="static">/var/log/</check_node>
+            <check_node part="argv" type="REGEX" check_data_type="static"><![CDATA[(?:(?:\brm\b|\bnano\b|\bgedit\b|\bemacs\b|\bprintf\b|\becho\b|\bchattr\s+\+i\b\s+-[\w-]*\b)[a-zA-Z0-9-\n ./]*\b)]]></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <del></del>
+        <action></action>
+        <desc affected_target="create file">检测到删除日志文件</desc>
+    </rule>
+</root>

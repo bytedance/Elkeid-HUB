@@ -1,0 +1,7 @@
+InputID: demo
+InputName: demo
+InputType: mock_from_files
+DataType: json
+MockFromFiles: 
+  - demo/1.RM_LOG/input/input_demo.json
+MockFromFilesRepeat: 10

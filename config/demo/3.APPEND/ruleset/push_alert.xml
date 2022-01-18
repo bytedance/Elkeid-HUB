@@ -1,0 +1,15 @@
+<root ruleset_id="push_alert" ruleset_name="push_alert" type="rule" undetected_discard="true">
+    <rule rule_id="push_alert_1" type="Detection" author="elkeid_group">
+        <rule_name>push_alert_1</rule_name>
+        <harm_level>high</harm_level>
+        <filter part="data_type">603</filter>
+        <check_list>
+        </check_list>
+        <alert_data>true</alert_data>
+        <append></append>
+        <modify></modify>
+        <del></del>
+        <action>PushMsgToFile</action>
+        <desc></desc>
+    </rule>
+</root>

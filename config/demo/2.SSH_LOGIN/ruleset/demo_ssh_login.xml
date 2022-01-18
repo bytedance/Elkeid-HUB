@@ -1,0 +1,19 @@
+<root ruleset_id="demo_ssh_login" ruleset_name="demo_ssh_login" type="rule" undetected_discard="true">
+    <rule rule_id="demo_sip_multi_login" type="Frequency" author="elkeid_group">
+        <rule_name>demo_sip_multi_login</rule_name>
+        <harm_level>high</harm_level>
+        <threshold count_field="agent_id" range="60">5</threshold>
+        <node_designate>
+        </node_designate>
+        <filter part="data_type">4000</filter>
+        <check_list>
+            <check_node part="status" type="INCL" check_data_type="static">false</check_node>
+            <check_node part="rawlog" type="NI" check_data_type="static"><![CDATA[receive identification]]></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <del></del>
+        <action></action>
+        <desc>集群中存在同IP爆破情况</desc>
+    </rule>
+</root>

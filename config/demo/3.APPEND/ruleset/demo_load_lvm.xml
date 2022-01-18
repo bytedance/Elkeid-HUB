@@ -1,0 +1,15 @@
+<root ruleset_id="demo_load_lkm" ruleset_name="demo_load_lkm" type="rule" undetected_discard="true">
+    <rule rule_id="demo_load_lkm_1" type="Detection" author="elkeid_group">
+        <rule_name>demo_load_lkm_1</rule_name>
+        <harm_level>high</harm_level>
+        <filter part="data_type">603</filter>
+        <check_list>
+        </check_list>
+        <alert_data>true</alert_data>
+        <append type="CUSTOM" rely_part="in_ipv4_list" append_field_name="CMDB_INFO">AddCMDBInfo</append>
+        <modify></modify>
+        <del></del>
+        <action></action>
+        <desc>存在添加内核模块的行为，疑似rootkit</desc>
+    </rule>
+</root>
