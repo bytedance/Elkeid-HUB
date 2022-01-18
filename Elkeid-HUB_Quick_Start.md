@@ -16,8 +16,8 @@ HUB Compressed package contains the HUB binary file, runtime dependencies, runti
 
 ```Shell
 mkdir -p ~/elkeid && cd ~/elkeid
-curl https://github.com/bytedance/Elkeid-HUB/releases/download/1.0/elkeid_hub_community_v1.0.zip
-unzip elkeid_hub_community.zip
+wget https://github.com/bytedance/Elkeid-HUB/releases/download/v1.0/elkeid_hub_community_v1.0.zip
+unzip elkeid_hub_community_v1.0.zip
 cd elkeid_hub_community
 ```
 
