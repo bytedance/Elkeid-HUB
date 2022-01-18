@@ -1,0 +1,219 @@
+<root ruleset_name="detection" type="rule" undetected_discard="true" ruleset_id="detection">
+
+    <!-- rootkit -->
+    <rule rule_id="hidden_module_detect" author="Elkeid" type="Detection">
+        <rule_name>hidden_module_detect</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="persistent" affected_target="host_process">Hidden Kernel Module Detected</desc>
+        <filter part="data_type">702</filter>
+        <check_list></check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+    </rule>
+
+    <!-- bruteforce -->
+    <rule rule_id="bruteforce_single_source_detect" author="Elkeid" type="Frequency">
+        <rule_name>bruteforce_single_source_detect</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>medium</harm_level>
+        <desc kill_chain_id="init_attack" affected_target="service">Bruteforce From Single Source</desc>
+        <filter part="data_type">4000</filter>
+        <check_list>
+            <check_node type="INCL" part="status">
+                <![CDATA[false]]>
+            </check_node>
+            <check_node type="NI" part="rawlog">
+                <![CDATA[receive identification]]>
+            </check_node>
+        </check_list>
+        <node_designate>
+            <node part="sip" />
+            <node part="agent_id" />
+        </node_designate>
+        <threshold range="60" hit_reset="true">12</threshold>
+        <del />
+        <action />
+    </rule>
+
+    <rule rule_id="bruteforce_multi_source_detect" author="Elkeid" type="Frequency">
+        <rule_name>bruteforce_multi_source_detect</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>medium</harm_level>
+        <desc kill_chain_id="init_attack" affected_target="service">Bruteforce From Multiple Source</desc>
+        <filter part="data_type">4000</filter>
+        <check_list>
+            <check_node type="INCL" part="status">
+                <![CDATA[false]]>
+            </check_node>
+            <check_node type="NI" part="rawlog">
+                <![CDATA[receive identification]]>
+            </check_node>
+        </check_list>
+        <node_designate>
+            <node part="agent_id" />
+        </node_designate>
+        <threshold range="60" hit_reset="true" count_type="classify" count_field="sip">5</threshold>
+        <del />
+        <action />
+    </rule>
+
+    <!-- evasion -->
+    <rule rule_id="binary_file_hijack_detect1" author="Elkeid" type="Detection">
+        <rule_name>binary_file_hijack_detect1</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="evasion" affected_target="host_process">Common Binary File Hijacking Detection</desc>
+        <filter part="data_type">602</filter>
+        <check_list>
+            <check_node type="INCL" part="file_path">bin</check_node>
+            <check_node type="REGEX" part="file_path">
+                <![CDATA[^(?:/usr/sbin/\w+|/usr/bin/\w+|/bin/\w+|/sbin/\w+)$]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+    </rule>
+    <rule rule_id="binary_file_hijack_detect2" author="Elkeid" type="Detection">
+        <rule_name>binary_file_hijack_detect2</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="persistent" affected_target="host_process">Common Binary File Hijacking Detection</desc>
+        <filter part="data_type">82</filter>
+        <check_list>
+            <check_node type="INCL" part="new_name">bin</check_node>
+            <check_node type="REGEX" part="new_name">
+                <![CDATA[^(?:/usr/sbin/\w+|/usr/bin/\w+|/bin/\w+|/sbin/\w+)$]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+    </rule>
+    <rule rule_id="binary_file_hijack_detect3" author="Elkeid" type="Detection">
+        <rule_name>binary_file_hijack_detect3</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="persistent" affected_target="host_process">Common Binary File Hijacking Detection</desc>
+        <filter part="data_type">86</filter>
+        <check_list>
+            <check_node type="INCL" part="new_name">bin</check_node>
+            <check_node type="REGEX" part="new_name">
+                <![CDATA[^(?:/usr/sbin/\w+|/usr/bin/\w+|/bin/\w+|/sbin/\w+)$]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+    </rule>
+
+    <!-- user credential escalation -->
+    <rule rule_id="user_credential_escalation_detect" author="Elkeid" type="Detection">
+        <rule_name>user_credential_escalation_detect</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="privilege_escalation" affected_target="host_process">Privilege Escalation Detection</desc>
+        <filter part="data_type">604</filter>
+        <check_list>
+        </check_list>
+        <node_designate>
+        </node_designate>
+        <del />
+        <action />
+    </rule>
+
+    <!-- reverse shell -->
+    <rule rule_id="reverse_shell_detect" author="Elkeid" type="Detection">
+        <rule_name>reverse_shell_detect</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="init_attack" affected_target="host_process">Reverse Shell With Connection</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="REGEX" part="exe">
+                <![CDATA[(?:\b[a-r|t-z]*sh\b|\bksh93\b)]]>
+            </check_node>
+            <check_node type="REGEX" part="stdout">
+                <![CDATA[(?:\bsocket\b)]]>
+            </check_node>
+            <check_node type="EQU" part="stdin" check_data_type="from_ori_data">stdout</check_node>
+            <check_node type="NI" part="sip">
+                <![CDATA[-1]]>
+            </check_node>
+            <check_node type="NI" part="dip">
+                <![CDATA[127.0.0.1]]>
+            </check_node>
+            <check_node type="NI" part="dip">
+                <![CDATA[-1]]>
+            </check_node>
+            <check_node type="NI" part="dport">
+                <![CDATA[-1]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+    </rule>
+
+    <!-- HUB's beginner guide case -->
+    <!-- pipe shell -->
+    <rule rule_id="pipe_shell_connection_detection" author="Elkeid" type="Detection">
+        <rule_name>pipe_shell_connection_detection</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="critical" affected_target="host_process">Double Piped Reverse Shell Detection</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="INCL" part="exe" logic_type="or" separator="|">
+                <![CDATA[nc|ncat|openssl|telnet]]>
+            </check_node>
+            <check_node type="REGEX" part="argv">
+                <![CDATA[(?:\btelnet\b|\bnc\b|\bnetcat\b|\bncat\b|\bopenssl\b.*-connect\b)]]>
+            </check_node>
+            <check_node type="REGEX" part="exe">
+                <![CDATA[(?:\bnc\b|\bncat\b|\btelnet\b|\bopenssl\b)]]>
+            </check_node>
+            <check_node type="NEQ" part="dport">
+                <![CDATA[22]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+    </rule>
+    <rule rule_id="pipe_shell_sh_detection" author="Elkeid" type="Detection">
+        <rule_name>pipe_shell_sh_detection</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="critical" affected_target="host_process">Double Piped Reverse Shell Detection</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="REGEX" part="exe">
+                <![CDATA[(?:\bbash\b|\bsh\b|\bzsh\b|\bdash\b|\bfish\b|\bcsh\b|\bksh\b)]]>
+            </check_node>
+            <check_node type="REGEX" part="argv">
+                <![CDATA[(?:\bbash$|\bsh$|\bzsh$|\bdash$|\bfish$|\bcsh$|\bksh$)]]>
+            </check_node>
+            <check_node type="REGEX" part="pgid_argv">
+                <![CDATA[(?:\btelnet\b|\bnc\b|\bnetcat\b|\bncat\b|\bopenssl\b.*-connect\b)]]>
+            </check_node>
+            <check_node type="NI" part="argv">
+                <![CDATA[.sh]]>
+            </check_node>
+            <check_node type="NI" part="argv">
+                <![CDATA[sh -c]]>
+            </check_node>
+            <check_node type="INCL" part="stdin">
+                <![CDATA[pipe]]>
+            </check_node>
+            <check_node type="INCL" part="stdout">
+                <![CDATA[pipe]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+    </rule>
+</root>

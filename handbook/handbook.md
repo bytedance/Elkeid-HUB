@@ -292,11 +292,11 @@ RuleSet：
 </root>
 ```
 
-如果其中**alert_data为True**，则该RuleSet会向后传递以下数据，会增加**SMITH_ALETR_DATA**字段，其中包括**HIT_DATA**用来描述命中规则的详情，以及**RULE_INFO**即规则本身的基本信息：
+如果其中**alert_data为True**，则该RuleSet会向后传递以下数据，会增加**SMITH_ALERT_DATA**字段，其中包括**HIT_DATA**用来描述命中规则的详情，以及**RULE_INFO**即规则本身的基本信息：
 
 ```JSON
 {
-    "SMITH_ALETR_DATA":{
+    "SMITH_ALERT_DATA":{
         "HIT_DATA":[
             "test2 exe:[INCL]: nmap"
         ],
@@ -898,7 +898,7 @@ action插件也支持自定义入参，具体使用方法请参考7.2.1
     <freq_black_data>True</freq_black_data>
     <harm_level>medium</harm_level>
     <desc kill_chain_id="init_attack" affected_target="service">存在多次使用网络攻击工具的行为，可能存在中间人/网络欺骗</desc>
-    <filter part="SMITH_ALETR_DATA.RULE_INFO.RuleID">init_attack_network</filter>
+    <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">init_attack_network</filter>
     <check_list>
     </check_list>
     <node_designate>
