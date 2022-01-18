@@ -4,7 +4,7 @@ English | [简体中文](Elkeid-HUB_Quick_Start-zh_CN.md)
 
 ### System Requirements
 
-64-bit Linux distribution(amd64)
+64-bit Linux distribution(amd64), with `gcc`
 
 ### Network Requirements
 
