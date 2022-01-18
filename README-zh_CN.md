@@ -1,6 +1,6 @@
 [English](README.md) | 简体中文
 # Elkeid HUB
-Elkeid HUB 是一款由 Elkeid Team 维护的事规则/事件处理引擎，支持流式/离线(社区版尚未支持)数据处理。 初衷是通过标准化的抽象语法/规则来解决复杂的数据/事件处理与外部系统联动需求。
+Elkeid HUB 是一款由 Elkeid Team 维护的规则/事件处理引擎，支持流式/离线(社区版尚未支持)数据处理。 初衷是通过标准化的抽象语法/规则来解决复杂的数据/事件处理与外部系统联动需求。
 
 ## Core Components
 * `INPUT` 数据输入层，社区版仅支持Kafka
