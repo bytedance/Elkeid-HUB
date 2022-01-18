@@ -11,6 +11,7 @@
         <node_designate></node_designate>
         <del />
         <action />
+        <append type="static" append_field_name="alert_type_us">persistent</append>
     </rule>
 
     <!-- bruteforce -->
@@ -35,8 +36,8 @@
         <threshold range="60" hit_reset="true">12</threshold>
         <del />
         <action />
+        <append type="static" append_field_name="alert_type_us">bruteforce</append>
     </rule>
-
     <rule rule_id="bruteforce_multi_source_detect" author="Elkeid" type="Frequency">
         <rule_name>bruteforce_multi_source_detect</rule_name>
         <alert_data>True</alert_data>
@@ -57,14 +58,16 @@
         <threshold range="60" hit_reset="true" count_type="classify" count_field="sip">5</threshold>
         <del />
         <action />
+        <append type="static" append_field_name="alert_type_us">bruteforce</append>
     </rule>
+
 
     <!-- evasion -->
     <rule rule_id="binary_file_hijack_detect1" author="Elkeid" type="Detection">
         <rule_name>binary_file_hijack_detect1</rule_name>
         <alert_data>True</alert_data>
         <harm_level>high</harm_level>
-        <desc kill_chain_id="evasion" affected_target="host_process">Common Binary File Hijacking Detection</desc>
+        <desc kill_chain_id="evasion" affected_target="host_process">Common Binary File Hijacking Detection, File Creation</desc>
         <filter part="data_type">602</filter>
         <check_list>
             <check_node type="INCL" part="file_path">bin</check_node>
@@ -75,12 +78,13 @@
         <node_designate></node_designate>
         <del />
         <action />
+        <append type="static" append_field_name="alert_type_us">evasion</append>
     </rule>
     <rule rule_id="binary_file_hijack_detect2" author="Elkeid" type="Detection">
         <rule_name>binary_file_hijack_detect2</rule_name>
         <alert_data>True</alert_data>
         <harm_level>high</harm_level>
-        <desc kill_chain_id="persistent" affected_target="host_process">Common Binary File Hijacking Detection</desc>
+        <desc kill_chain_id="evasion" affected_target="host_process">Common Binary File Hijacking Detection, File Renaming</desc>
         <filter part="data_type">82</filter>
         <check_list>
             <check_node type="INCL" part="new_name">bin</check_node>
@@ -91,12 +95,13 @@
         <node_designate></node_designate>
         <del />
         <action />
+        <append type="static" append_field_name="alert_type_us">evasion</append>
     </rule>
     <rule rule_id="binary_file_hijack_detect3" author="Elkeid" type="Detection">
         <rule_name>binary_file_hijack_detect3</rule_name>
         <alert_data>True</alert_data>
         <harm_level>high</harm_level>
-        <desc kill_chain_id="persistent" affected_target="host_process">Common Binary File Hijacking Detection</desc>
+        <desc kill_chain_id="evasion" affected_target="host_process">Common Binary File Hijacking Detection, File Linkage</desc>
         <filter part="data_type">86</filter>
         <check_list>
             <check_node type="INCL" part="new_name">bin</check_node>
@@ -107,7 +112,9 @@
         <node_designate></node_designate>
         <del />
         <action />
+        <append type="static" append_field_name="alert_type_us">evasion</append>
     </rule>
+
 
     <!-- user credential escalation -->
     <rule rule_id="user_credential_escalation_detect" author="Elkeid" type="Detection">
@@ -116,20 +123,20 @@
         <harm_level>high</harm_level>
         <desc kill_chain_id="privilege_escalation" affected_target="host_process">Privilege Escalation Detection</desc>
         <filter part="data_type">604</filter>
-        <check_list>
-        </check_list>
-        <node_designate>
-        </node_designate>
+        <check_list></check_list>
+        <node_designate></node_designate>
         <del />
         <action />
+        <append type="static" append_field_name="alert_type_us">privilege_escalation</append>
     </rule>
+
 
     <!-- reverse shell -->
     <rule rule_id="reverse_shell_detect" author="Elkeid" type="Detection">
         <rule_name>reverse_shell_detect</rule_name>
         <alert_data>True</alert_data>
         <harm_level>high</harm_level>
-        <desc kill_chain_id="init_attack" affected_target="host_process">Reverse Shell With Connection</desc>
+        <desc kill_chain_id="persistent" affected_target="host_process">Reverse Shell With Connection</desc>
         <filter part="data_type">59</filter>
         <check_list>
             <check_node type="REGEX" part="exe">
@@ -155,15 +162,17 @@
         <node_designate></node_designate>
         <del />
         <action />
+        <append type="static" append_field_name="alert_type_us">persistent</append>
     </rule>
+
 
     <!-- HUB's beginner guide case -->
     <!-- pipe shell -->
-    <rule rule_id="pipe_shell_connection_detection" author="Elkeid" type="Detection">
-        <rule_name>pipe_shell_connection_detection</rule_name>
+    <rule rule_id="pipe_shell_connection_detect" author="Elkeid" type="Detection">
+        <rule_name>pipe_shell_connection_detect</rule_name>
         <alert_data>True</alert_data>
         <harm_level>high</harm_level>
-        <desc kill_chain_id="critical" affected_target="host_process">Double Piped Reverse Shell Detection</desc>
+        <desc kill_chain_id="persistent" affected_target="host_process">Double Piped Reverse Shell Detection, Connection Part</desc>
         <filter part="data_type">59</filter>
         <check_list>
             <check_node type="INCL" part="exe" logic_type="or" separator="|">
@@ -182,12 +191,13 @@
         <node_designate></node_designate>
         <del />
         <action />
+        <append type="static" append_field_name="alert_type_us">persistent</append>
     </rule>
     <rule rule_id="pipe_shell_sh_detection" author="Elkeid" type="Detection">
         <rule_name>pipe_shell_sh_detection</rule_name>
         <alert_data>True</alert_data>
         <harm_level>high</harm_level>
-        <desc kill_chain_id="critical" affected_target="host_process">Double Piped Reverse Shell Detection</desc>
+        <desc kill_chain_id="persistent" affected_target="host_process">Double Piped Reverse Shell Detection, Connection Part</desc>
         <filter part="data_type">59</filter>
         <check_list>
             <check_node type="REGEX" part="exe">
@@ -198,6 +208,9 @@
             </check_node>
             <check_node type="REGEX" part="pgid_argv">
                 <![CDATA[(?:\btelnet\b|\bnc\b|\bnetcat\b|\bncat\b|\bopenssl\b.*-connect\b)]]>
+            </check_node>
+            <check_node type="NI" part="ppid_argv">
+                <![CDATA[ssh]]>
             </check_node>
             <check_node type="NI" part="argv">
                 <![CDATA[.sh]]>
@@ -215,5 +228,6 @@
         <node_designate></node_designate>
         <del />
         <action />
+        <append type="static" append_field_name="alert_type_us">persistent</append>
     </rule>
 </root>
