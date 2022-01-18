@@ -14,6 +14,7 @@
         <append type="static" append_field_name="alert_type_us">persistent</append>
     </rule>
 
+
     <!-- bruteforce -->
     <rule rule_id="bruteforce_single_source_detect" author="Elkeid" type="Frequency">
         <rule_name>bruteforce_single_source_detect</rule_name>
@@ -193,8 +194,8 @@
         <action />
         <append type="static" append_field_name="alert_type_us">persistent</append>
     </rule>
-    <rule rule_id="pipe_shell_sh_detection" author="Elkeid" type="Detection">
-        <rule_name>pipe_shell_sh_detection</rule_name>
+    <rule rule_id="pipe_shell_sh_detect" author="Elkeid" type="Detection">
+        <rule_name>pipe_shell_sh_detect</rule_name>
         <alert_data>True</alert_data>
         <harm_level>high</harm_level>
         <desc kill_chain_id="persistent" affected_target="host_process">Double Piped Reverse Shell Detection, Connection Part</desc>
@@ -230,4 +231,6 @@
         <action />
         <append type="static" append_field_name="alert_type_us">persistent</append>
     </rule>
+
+
 </root>

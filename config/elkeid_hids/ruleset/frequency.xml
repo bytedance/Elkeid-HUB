@@ -1,9 +1,9 @@
 <root ruleset_name="frequency" type="rule" undetected_discard="false" ruleset_id="frequency">
-    <rule rule_id="pipe_shell_detection" author="Elkeid" type="Frequency">
-        <rule_name>pipe_shell_detection</rule_name>
+    <rule rule_id="pipe_shell_detect" author="Elkeid" type="Frequency">
+        <rule_name>pipe_shell_detect</rule_name>
         <alert_data>True</alert_data>
         <harm_level>high</harm_level>
-        <desc kill_chain_id="critical" affected_target="host_process">Double Piped Reverse Shell Detection</desc>
+        <desc kill_chain_id="persistent" affected_target="host_process">Double Piped Reverse Shell Detection</desc>
         <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">pipe_shell_</filter>
         <check_list>
         </check_list>
