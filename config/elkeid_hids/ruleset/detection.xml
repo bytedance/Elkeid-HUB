@@ -140,9 +140,6 @@
         <desc kill_chain_id="persistent" affected_target="host_process">Reverse Shell With Connection</desc>
         <filter part="data_type">59</filter>
         <check_list>
-            <check_node type="REGEX" part="exe">
-                <![CDATA[(?:\b[a-r|t-z]*sh\b|\bksh93\b)]]>
-            </check_node>
             <check_node type="REGEX" part="stdout">
                 <![CDATA[(?:\bsocket\b)]]>
             </check_node>
