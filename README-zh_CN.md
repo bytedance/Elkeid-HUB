@@ -21,7 +21,7 @@ Elkeid HUB 是一款由 Elkeid Team 维护的规则/事件处理引擎，支持�
 <img src="example_complex.png"/>
 
 
-## Advantage
+## Advantages
 * 高性能
 * 依赖极少
 * 支持复杂数据处理
@@ -46,7 +46,7 @@ Elkeid HUB 是一款由 Elkeid Team 维护的规则/事件处理引擎，支持�
 [Elkeid-HUB Quick Start](docs/quick_start/quick_start.md)
 
 
-## Elkeid HUB Handbook (Chinese version only)
+## Elkeid HUB Handbook
 [Handbook](docs/handbook/handbook.md)
 
 ## Demo Config
