@@ -36,18 +36,16 @@ Elkeid HUB is a rule/event processing engine maintained by the Elkeid Team that 
 * Internal Maintenance Rules 2000+
 
 
-## Getting Started
-[Elkeid-HUB Quick Start](Elkeid-HUB_Quick_Start.md)
+## Getting Started (Chinese version only)
+[Elkeid-HUB Quick Start](docs/quick_start/quick_start.md)
 
-[Elkeid-HUB Demo(Chinese version only)](demo.md)
-
-## Elkeid HUB Handbook (chinese only)
-[Handbook](handbook/handbook.md)
+## Elkeid HUB Handbook (Chinese version only)
+[Handbook](docs/handbook/handbook.md)
 
 ## Demo Config
 [Demo](config/demo)
 
-## Elkeid HIDS Rule and Project(Just Example)
+## Elkeid HIDS Rule and Project (Just Example)
 [Elkeid Project](config/elkeid_hids)
 
 (Need to use with [Elkeid](https://github.com/bytedance/Elkeid))
