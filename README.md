@@ -31,9 +31,54 @@ Elkeid HUB is a rule/event processing engine maintained by the Elkeid Team that 
 * Support External System/Data Linkage
 
 ## Elkeid Internal Best Practices
-* Use Elkeid HUB to process Elkeid HIDS/RASP/Sandbox/etc. raw data, TPS ninety million/s. HUB scheduling instance 4000+
+* Use Elkeid HUB to process Elkeid HIDS/RASP/Sandbox/K8s auditing etc. raw data, TPS ninety million/s. HUB scheduling instance 6000+
 * 99% alarm produce time is less than 0.5s
 * Internal Maintenance Rules 2000+
+
+## Elkeid-HUB Function List
+
+| Ability List                  | Elkeid Community Edition | Elkeid Enterprise Edition |
+| ----------------------------- | ------------------------ | ------------------------- |
+| Streaming data processing     | :white_check_mark:       | :white_check_mark:        |
+| Data input, output capability | :white_check_mark:       | :white_check_mark:        |
+| Full frontend support         | :white_check_mark:       | :white_check_mark:        |
+| Monitoring capability         | :white_check_mark:       | :white_check_mark:        |
+| Plugin support                | :white_check_mark:       | :white_check_mark:        |
+| Debug support                 | :white_check_mark:       | :white_check_mark:        |
+| Offline data processing       | :ng_man:                 | :white_check_mark:        |
+| Data Persistence capability   | :ng_man:                 | :white_check_mark:        |
+| Workspace                     | :ng_man:                 | :white_check_mark:        |
+| Cluster mode                  | :ng_man:                 | :white_check_mark:        |
+| Online upgrade strategy       | :ng_man:                 | :white_check_mark:        |
+
+
+
+## Front-end Display (Community Edition)
+
+**Overview**
+<img src="docs/png/1_en.png" style="float:left;"/>
+
+
+
+**Edit Rule**
+<img src="docs/png/2_en.png" style="float:left;"/>
+
+
+
+**Edit HUB Project**
+<img src="docs/png/3_en.png" style="float:left;"/>
+
+
+
+**Edit HUB Python Plugin**
+<img src="docs/png/4_en.png" style="float:left;"/>
+
+
+
+**Submission Rules**
+<img src="docs/png/5_en.png" style="float:left;"/>
+
+
 
 
 ## Getting Started (Chinese version only)
