@@ -274,11 +274,11 @@ RuleSet：
 </rule>
 </root>
 ```
-如果其中**alert_data为True**，则该RuleSet会向后传递以下数据，会增加**SMITH_ALETR_DATA**字段，其中包括**HIT_DATA**用来描述命中规则的详情，以及**RULE_INFO**即规则本身的基本信息：
+如果其中**alert_data为True**，则该RuleSet会向后传递以下数据，会增加**SMITH_ALERT_DATA**字段，其中包括**HIT_DATA**用来描述命中规则的详情，以及**RULE_INFO**即规则本身的基本信息：
 
 ```
 {
-    "SMITH_ALETR_DATA":{
+    "SMITH_ALERT_DATA":{
         "HIT_DATA":[
             "test2 exe:[INCL]: nmap"
         ],
