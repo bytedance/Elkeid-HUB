@@ -31,7 +31,7 @@ Elkeid HUB is a rule/event processing engine maintained by the Elkeid Team that 
 * Support External System/Data Linkage
 
 ## Elkeid Internal Best Practices
-* Use Elkeid HUB to process Elkeid HIDS/RASP/Sandbox/K8s auditing etc. raw data, TPS 1.2+ billion/s. HUB scheduling instance 6000+
+* Use Elkeid HUB to process Elkeid HIDS/RASP/Sandbox/K8s auditing etc. raw data, TPS 120+ million/s. HUB scheduling instance 6000+
 * 99% alarm produce time is less than 0.5s
 * Internal Maintenance Rules 2000+
 
