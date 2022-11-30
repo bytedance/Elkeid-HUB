@@ -82,7 +82,8 @@ Elkeid HUB is a rule/event processing engine maintained by the Elkeid Team that 
 
 
 ## Getting Started (Chinese version only)
-[Elkeid-HUB Quick Start](docs/quick_start/quick_start.md)
+- [Deploy By Elkeidup](https://github.com/bytedance/Elkeid/blob/v1.9.1/elkeidup/README-zh_CN.md#elkeid-hub-单独部署)
+- [Elkeid HUB Quick Start](docs/quick_start/quick_start.md)
 
 ## Elkeid HUB Handbook (Chinese version only)
 [Handbook](docs/handbook/handbook.md)

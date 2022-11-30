@@ -76,10 +76,9 @@ Elkeid HUB 是一款由 Elkeid Team 维护的规则/事件处理引擎，支持�
 <img src="docs/png/5.png" style="float:left;"/>
 
 
-
 ## Getting Started
-
-[Elkeid-HUB Quick Start](docs/quick_start/quick_start.md)
+- [Deploy By Elkeidup](https://github.com/bytedance/Elkeid/blob/v1.9.1/elkeidup/README-zh_CN.md#elkeid-hub-单独部署)
+- [Elkeid HUB Quick Start](docs/quick_start/quick_start.md)
 
 
 ## Elkeid HUB Handbook
