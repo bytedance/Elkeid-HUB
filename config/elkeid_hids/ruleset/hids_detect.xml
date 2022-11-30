@@ -1,0 +1,813 @@
+<root ruleset_name="hids_detect" type="rule" undetected_discard="true" ruleset_id="hids_detect">
+
+    <!-- VERY IMPORTANT -->
+    <!-- Please DO notice this open sourced version rules are not what Elkeid team use for commercial products. -->
+    <!-- We specifically selected these rules for guiding purpose and hope to provide basic detection capabilities for open-sourced user. -->
+    <!-- You may encounter false-negative with some testing sets. -->
+    <!-- We welcome any rules modifications or recommandations to the community-->
+
+    <!-- rootkit -->
+    <rule rule_id="hidden_module_detect" author="Elkeid" type="Detection">
+        <rule_name>Hidden kernel module</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="persistent" affected_target="host_process">Hidden Kernel Module Detected</desc>
+        <filter part="data_type">702</filter>
+        <check_list></check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">persistent</append>
+        <append type="static" append_field_name="attack_id_list">T1014</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether the [kernel module name] hiding its own behavior is a business behavior
+2. For non-business activities, please log in as root, use the [lsmod] command to check the kernel modules, or use the [cat /proc/modules] command to view the list of kernel modules
+3. After confirming the risk, it is recommended to use the [rmmod] command to uninstall the kernel module corresponding to the alarm.
+4. Please combine other alarms in the subordinate events to determine the source of the entry
+</append>
+    </rule>
+
+
+    <!-- bruteforce -->
+    <rule rule_id="bruteforce_single_source_detect" author="Elkeid" type="Frequency">
+        <rule_name>Bruteforce from single-source</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>medium</harm_level>
+        <desc kill_chain_id="bruteforce" affected_target="service">Bruteforce from single source address</desc>
+        <filter part="data_type">4000</filter>
+        <check_list>
+            <check_node type="INCL" part="status">
+                <![CDATA[false]]>
+            </check_node>
+            <check_node type="NI" part="rawlog">
+                <![CDATA[receive identification]]>
+            </check_node>
+        </check_list>
+        <node_designate>
+            <node part="sip" />
+            <node part="agent_id" />
+        </node_designate>
+        <threshold range="60" hit_reset="true">12</threshold>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">bruteforce</append>
+        <append type="static" append_field_name="attack_id_list">T1014</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether it is triggered by multiple failed logins of the business
+2. For non-business activities, please log in through root, and use the [passwd $USER] command to modify and strengthen the corresponding user password
+3. Query all sshd login trigger processes [ps aux | grep sshd], and close the process corresponding to the logged in user [kill -9 $PID]
+4. Disable password login by modifying the [/etc/ssh/sshd_config] configuration file and restarting the sshd service</append>
+    </rule>
+    <rule rule_id="bruteforce_multi_source_detect" author="Elkeid" type="Frequency">
+        <rule_name>Bruteforce from multi-sources</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>medium</harm_level>
+        <desc kill_chain_id="bruteforce" affected_target="service">Bruteforce from multiple source addresses</desc>
+        <filter part="data_type">4000</filter>
+        <check_list>
+            <check_node type="INCL" part="status">
+                <![CDATA[false]]>
+            </check_node>
+            <check_node type="NI" part="rawlog">
+                <![CDATA[receive identification]]>
+            </check_node>
+        </check_list>
+        <node_designate>
+            <node part="agent_id" />
+        </node_designate>
+        <threshold range="60" hit_reset="true" count_type="classify" count_field="sip">5</threshold>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">bruteforce</append>
+        <append type="static" append_field_name="attack_id_list">T1572</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether it is triggered by multiple failed logins of the business
+2. For non-business activities, please log in through root, and use the [passwd $USER] command to modify and strengthen the corresponding user password
+3. Query all sshd login trigger processes [ps aux | grep sshd], and close the process corresponding to the logged in user [kill -9 $PID]
+4. Disable password login by modifying the [/etc/ssh/sshd_config] configuration file and restarting the sshd service</append>
+    </rule>
+    <rule rule_id="bruteforce_success_part1" author="Elkeid" type="Frequency">
+        <rule_name>Bruteforce succes part1</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>info</harm_level>
+        <desc kill_chain_id="bruteforce" affected_target="service">Bruteforce success detection, with failed attampt first</desc>
+        <filter part="data_type">4000</filter>
+        <check_list>
+            <check_node type="INCL" part="status">
+                <![CDATA[false]]>
+            </check_node>
+            <check_node type="NI" part="rawlog">
+                <![CDATA[receive identification]]>
+            </check_node>
+        </check_list>
+        <node_designate>
+            <node part="agent_id" />
+            <node part="sip" />
+        </node_designate>
+        <threshold range="300" hit_reset="true">12</threshold>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">bruteforce</append>
+    </rule>
+    <rule rule_id="bruteforce_success_part2" author="Elkeid" type="Detection">
+        <rule_name>Bruteforce success part2</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>info</harm_level>
+        <desc kill_chain_id="bruteforce" affected_target="service">Bruteforce success detection, with success login</desc>
+        <filter part="data_type">4000</filter>
+        <check_list>
+            <check_node type="INCL" part="status">
+                <![CDATA[true]]>
+            </check_node>
+            <check_node type="INCL" part="types">
+                <![CDATA[password]]>
+            </check_node>
+        </check_list>
+        <node_designate>
+        </node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">bruteforce</append>
+    </rule>
+
+
+    <!-- evasion -->
+    <rule rule_id="binary_file_hijack_detect1" author="Elkeid" type="Detection">
+        <rule_name>Binary file hijack</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="evasion" affected_target="host_process">Common binary file hijacking, file creation detection</desc>
+        <filter part="data_type">602</filter>
+        <check_list>
+            <check_node type="INCL" part="file_path">bin</check_node>
+            <check_node type="REGEX" part="file_path">
+                <![CDATA[^(?:/usr/sbin/\w+|/usr/bin/\w+|/bin/\w+|/sbin/\w+)$]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">evasion</append>
+        <append type="static" append_field_name="attack_id_list">T1036</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is a known business behavior, or whether there is an update binary behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the suspicious masquerading process [kill -9 $PID]
+4. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope.</append>
+    </rule>
+    <rule rule_id="binary_file_hijack_detect2" author="Elkeid" type="Detection">
+        <rule_name>Binary file hijack</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="evasion" affected_target="host_process">Common binary file Hijacking, file renaming detection</desc>
+        <filter part="data_type">82</filter>
+        <check_list>
+            <check_node type="INCL" part="new_name">bin</check_node>
+            <check_node type="REGEX" part="new_name">
+                <![CDATA[^(?:/usr/sbin/\w+|/usr/bin/\w+|/bin/\w+|/sbin/\w+)$]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">evasion</append>
+        <append type="static" append_field_name="attack_id_list">T1036</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is a known business behavior, or whether there is an update binary behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the suspicious masquerading process [kill -9 $PID]
+4. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope.</append>
+    </rule>
+    <rule rule_id="binary_file_hijack_detect3" author="Elkeid" type="Detection">
+        <rule_name>Binary file hijack</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="evasion" affected_target="host_process">Common binary file hijacking, file linkage detection</desc>
+        <filter part="data_type">86</filter>
+        <check_list>
+            <check_node type="INCL" part="new_name">bin</check_node>
+            <check_node type="REGEX" part="new_name">
+                <![CDATA[^(?:/usr/sbin/\w+|/usr/bin/\w+|/bin/\w+|/sbin/\w+)$]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">evasion</append>
+        <append type="static" append_field_name="attack_id_list">T1036</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is a known business behavior, or whether there is an update binary behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the suspicious masquerading process [kill -9 $PID]
+4. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope.</append>
+    </rule>
+
+
+
+    <!-- user credential escalation -->
+    <rule rule_id="user_credential_escalation_detect" author="Elkeid" type="Detection">
+        <rule_name>User credential escalation</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="privilege_escalation" affected_target="host_process">Non-root user escalate to root privilege</desc>
+        <filter part="data_type">604</filter>
+        <check_list></check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">privilege_escalation</append>
+        <append type="static" append_field_name="attack_id_list">T1068</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is any known business binary modification permission behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the suspicious privilege escalation process [kill -9 $PID]
+4. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope.</append>
+    </rule>
+    <rule rule_id="privilege_escalation_suid_sgid_detect_1" conn_id="" type="Detection" author="Elkeid">
+        <rule_name>User credential escalation</rule_name>
+        <harm_level>high</harm_level>
+        <desc affected_target="host_process" kill_chain_id="privilege_escalation">Non-root user escalete privilege with suid/sgid</desc>
+        <filter part="data_type">611</filter>
+        <check_list>
+            <check_node part="comm" type="INCL" check_data_type="static">
+                <![CDATA[find]]>
+            </check_node>
+            <check_node part="cred" type="REGEX" check_data_type="static">
+                <![CDATA[^\+?[1-9]\d*\|0]]>
+            </check_node>
+            <check_node part="argv" type="INCL" check_data_type="static">
+                <![CDATA[-exec]]>
+            </check_node>
+            <check_node part="pid_tree" type="NI" check_data_type="static">
+                <![CDATA[sudo]]>
+            </check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <del></del>
+        <action></action>
+        <append type="static" append_field_name="alert_type_us">privilege_escalation</append>
+        <append type="static" append_field_name="attack_id_list">T1068</append>
+        <append type="STATIC" append_field_name="suggestion">1. Please confirm whether there is a penetration test behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Please re-evaluate whether the file with suid permission is reasonable and remove the suid [chmod u-s filename]
+4. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope.</append>
+    </rule>
+    <rule rule_id="privilege_escalation_suid_sgid_detect_2" conn_id="" type="Detection" author="Elkeid">
+        <rule_name>User credential escalation</rule_name>
+        <harm_level>high</harm_level>
+        <desc affected_target="host_process" kill_chain_id="privilege_escalation">Non-root user escalete privilege with suid/sgid</desc>
+        <filter part="data_type">611</filter>
+        <check_list>
+            <check_node part="comm" type="INCL" separator="|" logic_type="OR" check_data_type="static">
+                <![CDATA[bash|dash]]>
+            </check_node>
+            <check_node part="cred" type="REGEX" check_data_type="static">
+                <![CDATA[^\+?[1-9]\d*\|0]]>
+            </check_node>
+            <check_node part="pid_tree" type="NI" check_data_type="static">
+                <![CDATA[sudo]]>
+            </check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <del></del>
+        <action></action>
+        <append type="static" append_field_name="alert_type_us">privilege_escalation</append>
+        <append type="static" append_field_name="attack_id_list">T1068</append>
+        <append type="STATIC" append_field_name="suggestion">1. Please confirm whether there is a penetration test behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Please re-evaluate whether the file with suid permission is reasonable and remove the suid [chmod u-s filename]
+4. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope.</append>
+    </rule>
+
+
+
+    <!-- reverse shell && bind shell -->
+    <rule rule_id="reverse_shell_detect_basic" author="Elkeid" type="Detection">
+        <rule_name>Reverse shell</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="persistent" affected_target="host_process">Reverse shell With connection</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="REGEX" part="exe">
+                <![CDATA[(?:\b[a-r|t-z]*sh\b|\bksh93\b)]]>
+            </check_node>
+            <check_node type="REGEX" part="stdout">
+                <![CDATA[(?:\bsocket\b)]]>
+            </check_node>
+            <check_node type="EQU" part="stdin" check_data_type="from_ori_data">stdout</check_node>
+            <check_node type="NI" part="sip">
+                <![CDATA[-]]>
+            </check_node>
+            <check_node type="NI" part="dip">
+                <![CDATA[127.0.0.1]]>
+            </check_node>
+            <check_node type="NI" part="dip">
+                <![CDATA[-]]>
+            </check_node>
+            <check_node type="NI" part="dport">
+                <![CDATA[-]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">execution</append>
+        <append type="static" append_field_name="attack_id_list">T1059</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is any known penetration testing behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the rebound shell process [kill -9 $PID]
+4. If the destination IP in [Connection Information] is not the main business IP, it is recommended to block access requests to malicious IPs
+5. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope</append>
+    </rule>
+    <rule rule_id="reverse_shell_detect_argv" author="Elkeid" type="Detection">
+        <rule_name>Reverse shell</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="execution" affected_target="host_process">Reverse-shell-like argv during execution</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="REGEX" part="argv">
+                <![CDATA[(?:\bnc(?:\s+-+\w+\s*[^\x3B\x7C]*\s+-\w*e\w*\b|\s+-\w*e\w*|\s+[\d\.\s]+\s+-\w*e\w*)|\bnc.openbsd(?:\s+-+\w+\s*[^\x3B\x7C]*\s+-\w*e\w*\b|\s+-\w*e\w*|\s+[\d\.\s]+\s+-\w*e\w*)|\bnc.traditional(?:\s+-+\w+\s*[^\x3B\x7C]*\s+-\w*e\w*\b|\s+-\w*e\w*|\s+[\d\.\s]+\s+-\w*e\w*)|\bnc.linux(?:\s+-+\w+\s*[^\x3B\x7C]*\s+-\w*e\w*\b|\s+-\w*e\w*|\s+[\d\.\s]+\s+-\w*e\w*)|\bnetcat(?:\s+-+\w+\s*[^\x3B\x7C]*\s+-\w*e\w*\b|\s+-\w*e\w*|\s+[\d\.\s]+\s+-\w*e\w*))]]>
+            </check_node>
+            <check_node type="INCL" part="argv">
+                <![CDATA[nc]]>
+            </check_node>
+            <check_node type="REGEX" part="exe">
+                <![CDATA[(?:\bnc\b|\bncat\b|\bnetcat\b|\bbusybox\b)]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">execution</append>
+        <append type="static" append_field_name="attack_id_list">T1059</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is any known penetration testing behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the rebound shell process [kill -9 $PID]
+4. If the destination IP in [Connection Information] is not the main business IP, it is recommended to block access requests to malicious IPs
+5. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope</append>
+    </rule>
+    <rule rule_id="reverse_shell_detect_exec" author="Elkeid" type="Detection">
+        <rule_name>reverse_shell_detect_exec</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="execution" affected_target="host_process">Reverse shell with exec</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node part="argv" type="EQU" separator="|" logic_type="or">
+                <![CDATA[cat|less|more|tail]]>
+            </check_node>
+            <check_node part="stdin" type="INCL">socket:</check_node>
+            <check_node part="stdout" type="INCL">pipe</check_node>
+            <check_node part="dip" type="NSTART" separator="|" logic_type="and">
+                <![CDATA[127.0.0.|0000:0000:0000:0000:0000:0000:0000:]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">execution</append>
+        <append type="static" append_field_name="attack_id_list">T1059</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is any known penetration testing behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the rebound shell process [kill -9 $PID]
+4. If the destination IP in [Connection Information] is not the main business IP, it is recommended to block access requests to malicious IPs
+5. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope</append>
+    </rule>
+    <rule rule_id="reverse_shell_detect_pipe" author="Elkeid" type="Detection">
+        <rule_name>Reverse shell</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="execution" affected_target="host_process">Reverse shell with pipe</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="END" part="exe" logic_type="or" separator="|">
+                <![CDATA[/bin/dash|/bin/sh|/bin/bash|/bin/zsh]]>
+            </check_node>
+            <check_node type="EQU" part="argv" logic_type="or" separator="|">
+                <![CDATA[/bin/dash|/bin/sh|/bin/bash|/bin/zsh|bash|sh]]>
+            </check_node>
+            <check_node type="INCL" part="stdin">
+                <![CDATA[pipe]]>
+            </check_node>
+            <check_node type="INCL" part="stdout">
+                <![CDATA[pipe]]>
+            </check_node>
+            <check_node type="NI" part="socket_argv">
+                <![CDATA[ssh]]>
+            </check_node>
+            <check_node type="NI" part="socket_argv">
+                <![CDATA[-]]>
+            </check_node>
+            <check_node type="NOTNULL" part="socket_argv"></check_node>
+            <check_node part="socket_argv" type="EQU" check_data_type="from_ori_data">ppid_argv</check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">execution</append>
+        <append type="static" append_field_name="attack_id_list">T1059</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is any known penetration testing behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the rebound shell process [kill -9 $PID]
+4. If the destination IP in [Connection Information] is not the main business IP, it is recommended to block access requests to malicious IPs
+5. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope</append>
+    </rule>
+    <!-- We've only left two script language reverse shell for guiding purpose -->
+    <rule rule_id="reverse_shell_detect_perl" author="Elkeid" type="Detection">
+        <rule_name>Reverse shell</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="execution" affected_target="host_process">Reverse shell with Perl</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="INCL" part="exe">
+                <![CDATA[perl]]>
+            </check_node>
+            <check_node type="REGEX" part="argv">
+                <![CDATA[(?:exec|system|\x60.*\x60)]]>
+            </check_node>
+            <check_node type="REGEX" part="argv">
+                <![CDATA[(?:\bbash\b|\bsh\b|\bzsh\b|\bdash\b|\bfish\b|\bcsh\b|\bksh\b|Socket.*fdopen|Socket.*sysread.*syswrite)]]>
+            </check_node>
+            <check_node type="INCL" part="argv">
+                <![CDATA[Socket]]>
+            </check_node>
+            <check_node type="NI" part="argv">
+                <![CDATA[.sh]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">execution</append>
+        <append type="static" append_field_name="attack_id_list">T1059</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is any known penetration testing behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the rebound shell process [kill -9 $PID]
+4. If the destination IP in [Connection Information] is not the main business IP, it is recommended to block access requests to malicious IPs
+5. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope</append>
+    </rule>
+    <rule rule_id="reverse_shell_detect_python" author="Elkeid" type="Detection">
+        <rule_name>Reverse shell</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="execution" affected_target="host_process">Reverse shell with Python</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node part="exe" type="INCL">
+                <![CDATA[python]]>
+            </check_node>
+            <check_node part="argv" type="INCL">
+                <![CDATA[python]]>
+            </check_node>
+            <check_node part="argv" type="REGEX">
+                <![CDATA[(?:\bpty.spawn\b|\bsubprocess\b|os.system\b|\bexec\b|\bfexecve\b)]]>
+            </check_node>
+            <check_node part="argv" type="REGEX">
+                <![CDATA[(?:\bbash\b|[^\x2e]\bsh\b|\bzsh\b|b\bdash\b|\bfish\b|\bcsh\b|\bksh\b|b64decode|base64)]]>
+            </check_node>
+            <check_node part="argv" type="NI">
+                <![CDATA[zip]]>
+            </check_node>
+            <check_node part="argv" type="NI">
+                <![CDATA[.sh]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">execution</append>
+        <append type="static" append_field_name="attack_id_list">T1059</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is any known penetration testing behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the rebound shell process [kill -9 $PID]
+4. If the destination IP in [Connection Information] is not the main business IP, it is recommended to block access requests to malicious IPs
+5. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope</append>
+    </rule>
+
+
+    <rule rule_id="bind_shell_awk_detect" author="Elkeid" type="Detection">
+        <rule_name>Bind shell with awk</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="execution" affected_target="service">Suspecious bind shell with awk</desc>
+        <filter part="data_type">49</filter>
+        <check_list>
+            <check_node type="REGEX" part="exe">
+                <![CDATA[(?:\bgawk\b|\bawk\b)]]>
+            </check_node>
+            <check_node type="INCL" part="argv">
+                <![CDATA[getline]]>
+            </check_node>
+            <check_node type="INCL" part="argv">
+                <![CDATA[while]]>
+            </check_node>
+            <check_node type="INCL" part="argv">
+                <![CDATA[awk]]>
+            </check_node>
+        </check_list>
+        <node_designate />
+        <threshold />
+        <del />
+        <action />
+        <alert_email />
+        <append type="static" append_field_name="alert_type_us">execution</append>
+        <append type="static" append_field_name="attack_id_list">T1059</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is any known penetration testing behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the rebound process [kill -9 $PID]
+4. If the destination IP in [Connection Information] is not the main business IP, it is recommended to block access requests to malicious IPs
+5. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope</append>
+    </rule>
+
+
+
+    <!-- HUB's beginner guide case -->
+    <!-- pipe shell -->
+    <rule rule_id="pipe_shell_connection" author="Elkeid" type="Detection">
+        <rule_name>Double piped reverse shell</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="execution" affected_target="host_process">Double-piped reverse shell, the connection part</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="INCL" part="exe" logic_type="or" separator="|">
+                <![CDATA[nc|ncat|openssl|telnet]]>
+            </check_node>
+            <check_node type="REGEX" part="argv">
+                <![CDATA[(?:\btelnet\b|\bnc\b|\bnetcat\b|\bncat\b|\bopenssl\b.*-connect\b)]]>
+            </check_node>
+            <check_node type="REGEX" part="exe">
+                <![CDATA[(?:\bnc\b|\bncat\b|\btelnet\b|\bopenssl\b)]]>
+            </check_node>
+            <check_node type="NEQ" part="dport">
+                <![CDATA[22]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">execution</append>
+    </rule>
+    <rule rule_id="pipe_shell_sh" author="Elkeid" type="Detection">
+        <rule_name>Double piped reverse shell</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="execution" affected_target="host_process">Double-piped reverse shell, the shell part</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="REGEX" part="exe">
+                <![CDATA[(?:\bbash\b|\bsh\b|\bzsh\b|\bdash\b|\bfish\b|\bcsh\b|\bksh\b)]]>
+            </check_node>
+            <check_node type="REGEX" part="argv">
+                <![CDATA[(?:\bbash$|\bsh$|\bzsh$|\bdash$|\bfish$|\bcsh$|\bksh$)]]>
+            </check_node>
+            <check_node type="REGEX" part="pgid_argv">
+                <![CDATA[(?:\btelnet\b|\bnc\b|\bnetcat\b|\bncat\b|\bopenssl\b.*-connect\b)]]>
+            </check_node>
+            <check_node type="NI" part="ppid_argv">
+                <![CDATA[ssh]]>
+            </check_node>
+            <check_node type="NI" part="argv">
+                <![CDATA[.sh]]>
+            </check_node>
+            <check_node type="NI" part="argv">
+                <![CDATA[sh -c]]>
+            </check_node>
+            <check_node type="INCL" part="stdin">
+                <![CDATA[pipe]]>
+            </check_node>
+            <check_node type="INCL" part="stdout">
+                <![CDATA[pipe]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">execution</append>
+    </rule>
+
+    <!-- RCE like rules -->
+    <!-- Replace your service's /proc/{pid}/comm field into the pid_tree check node to create your own rce rules-->
+    <rule rule_id="suspicious_rce_from_consul_service_detect" author="Elkeid" type="Detection">
+        <rule_name>Suspecious RCE like behavior</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="initial_access" affected_target="service">Suspecious RCE like behaviors from Consul service</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="REGEX" part="exe">
+                <![CDATA[(?:\bcurl\b|\bwget\b|\bwhoami\b|\bid\b|\bbusybox\b)]]>
+            </check_node>
+            <check_node type="REGEX" part="argv">
+                <![CDATA[(?:\bcurl\b|\bwget\b|\bwhoami\b|\bid\b)]]>
+            </check_node>
+            <check_node type="NI" part="socket_argv">
+                <![CDATA[ssh]]>
+            </check_node>
+            <check_node type="INCL" part="pid_tree" logic_type="or" separator="|">
+                <![CDATA[.Consul<|.consul<]]>
+            </check_node>
+        </check_list>
+        <node_designate />
+        <threshold />
+        <del />
+        <action />
+        <alert_email />
+        <append type="static" append_field_name="alert_type_us">initial_access</append>
+        <append type="static" append_field_name="attack_id_list">T1068</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there are known business behaviors or penetration testing behaviors
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files downloaded by [rm] or close the started process [kill -9 $PID] according to the type of sensitive command
+4. Please check the service log content to confirm the vulnerability entry
+5. Please make reinforcement judgments based on the asset list vulnerability information, update the service version in time, and appropriately reduce the scope of non-essential service monitoring</append>
+    </rule>
+    <rule rule_id="suspicious_rce_from_mysql_service_detect" author="Elkeid" type="Detection">
+        <rule_name>Suspecious RCE like behavior</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="initial_access" affected_target="service">Suspecious RCE like behaviors from mysql service</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="REGEX" part="exe">
+                <![CDATA[(?:\bcurl\b|\bwget\b|\bwhoami\b|\bid\b|\bbusybox\b)]]>
+            </check_node>
+            <check_node type="REGEX" part="argv">
+                <![CDATA[(?:\bcurl\b|\bwget\b|\bwhoami\b|\bid\b)]]>
+            </check_node>
+            <check_node type="NI" part="socket_argv">
+                <![CDATA[ssh]]>
+            </check_node>
+            <check_node type="INCL" part="pid_tree" logic_type="or" separator="|">
+                <![CDATA[.marial<|.mysqld<]]>
+            </check_node>
+        </check_list>
+        <node_designate />
+        <threshold />
+        <del />
+        <action />
+        <alert_email />
+        <append type="static" append_field_name="alert_type_us">initial_access</append>
+        <append type="static" append_field_name="attack_id_list">T1068</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there are known business behaviors or penetration testing behaviors
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files downloaded by [rm] or close the started process [kill -9 $PID] according to the type of sensitive command
+4. Please check the service log content to confirm the vulnerability entry
+5. Please make reinforcement judgments based on the asset list vulnerability information, update the service version in time, and appropriately reduce the scope of non-essential service monitoring</append>
+    </rule>
+
+
+    <!-- DNS log during initial access phase -->
+    <rule rule_id="dnslog_detect1" type="Detection" author="Elkeid">
+        <rule_name>Suspecious query to dnslog</rule_name>
+        <harm_level>medium</harm_level>
+        <alert_data>true</alert_data>
+        <filter part="data_type">601</filter>
+        <desc kill_chain_id="initial_access" affected_target="service">Suspecious dnslog like query on hosts</desc>
+        <check_list>
+            <check_node part="query" type="END" separator="|" logic_type="OR" check_data_type="static">
+                <![CDATA[.awvsscan119.autoverify.cn|.cybertunnel.run|.dnstunnel.run|.s0x.cn|.dns.1433.eu.org|.logplog.eu.org|.ns.dns3.cf|.vuleye.pw|.ceye.io|.exeye.io|.vcap.me|.xip.name|.xip.io|.sslip.io|.nip.io|.burpcollaborator.net|.tu4.org|.2xss.cc|.bxss.me|.godns.vip|.0kee.360.cn|.r87.me|.ngrok.io|.xn--9tr.com|.pipedream.net|.vxtrans.com|.vxtrans.link|.hopto.org|.zapto.org|.sytes.net|.ddns.net]]>
+            </check_node>
+        </check_list>
+        <node_designate />
+        <threshold />
+        <del />
+        <action />
+        <alert_email />
+        <append type="static" append_field_name="alert_type_us">initial_access</append>
+        <append type="static" append_field_name="attack_id_list">T1203</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there are known business behaviors or penetration testing behaviors
+2. If it is not a business activity, please log in through root and view the business service log file
+3. Please update the service version in time if necessary</append>
+    </rule>
+    <rule rule_id="dnslog_detect2" type="Detection" author="Elkeid">
+        <rule_name>Suspecious query to dnslog</rule_name>
+        <harm_level>medium</harm_level>
+        <alert_data>true</alert_data>
+        <desc kill_chain_id="initial_access" affected_target="service">Suspecious dnslog like query on hosts</desc>
+        <filter part="data_type">601</filter>
+        <check_list>
+            <check_node part="query" type="INCL" check_data_type="static">
+                <![CDATA[.dnslog.]]>
+            </check_node>
+        </check_list>
+        <node_designate />
+        <threshold />
+        <del />
+        <action />
+        <alert_email />
+        <append type="static" append_field_name="alert_type_us">initial_access</append>
+        <append type="static" append_field_name="attack_id_list">T1203</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there are known business behaviors or penetration testing behaviors
+2. If it is not a business activity, please log in through root and view the business service log file
+3. Please update the service version in time if necessary</append>
+    </rule>
+
+
+    <!-- container related rules -->
+    <!-- You may take the fact that normal container's process name space (pns) is different from root process namespace (root_pns) to filter out behaviors inside docker -->
+    <rule rule_id="container_escape_mount_drive_detect" author="Elkeid" type="Detection">
+        <rule_name>Container escape with mounted drive</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>medium</harm_level>
+        <desc kill_chain_id="privilege_escalation" affected_target="host_process">Unnecessary behavior inside contianer, mount drive</desc>
+        <filter part="data_type">59</filter>
+        <check_list>
+            <check_node type="INCL" part="argv">
+                <![CDATA[mount]]>
+            </check_node>
+            <check_node type="INCL" part="argv">
+                <![CDATA[/dev/]]>
+            </check_node>
+            <check_node type="REGEX" part="argv">
+                <![CDATA[(?:mount\s+/dev/\w+)]]>
+            </check_node>
+            <check_node type="REGEX" part="exe">
+                <![CDATA[(?:/busybox|/mount|/grub-mount)]]>
+            </check_node>
+            <check_node type="EQU" part="pns" check_data_type="from_ori_data">root_pns</check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <append type="static" append_field_name="alert_type_us">privilege_escalation</append>
+        <append type="static" append_field_name="attack_id_list">T1611</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there are known business behaviors or penetration testing behaviors
+2. If it is not a business activity, please log in as root, and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive; use the [docker ps] command to check whether the container is alive or not
+3. Clean up the files of the [rm] startup process, close the escape process [kill -9 $PID], and unbind the system disk [umount]
+4. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope.
+5. If necessary, please close the container itself in time</append>
+    </rule>
+    <rule rule_id="container_escape_usermode_helper_detect" type="Detection" author="Elkeid">
+        <rule_name>Container escape with usermodehelper</rule_name>
+        <harm_level>info</harm_level>
+        <alert_data>true</alert_data>
+        <desc kill_chain_id="privilege_escalation" affected_target="host_process">Suspecious contianer escape with usermode helper</desc>
+        <filter part="data_type">607</filter>
+        <check_list>
+            <check_node part="exe" type="REGEX" check_data_type="static">
+                <![CDATA[(?:[0-9a-z]{64}/diff/)]]>
+            </check_node>
+            <check_node part="exe" type="INCL" check_data_type="static">
+                <![CDATA[overlay]]>
+            </check_node>
+        </check_list>
+        <append type="static" append_field_name="alert_type_us">privilege_escalation</append>
+        <append type="static" append_field_name="attack_id_list">T1611</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there are known business behaviors or penetration testing behaviors
+2. If it is not a business activity, please log in as root, and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive; use the [docker ps] command to check whether the container is alive or not
+3. Clean up the files of the [rm] startup process and close the escape process [kill -9 $PID]
+4. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope.
+5. If necessary, please close the container itself in time</append>
+    </rule>
+
+
+
+
+    <!-- scanner related alerts -->
+    <rule rule_id="signature_scan_maliciou_files_detect" author="Elkeid" type="Detection">
+        <rule_name>Malicious files</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="static" affected_target="host_process">Detected abnormal files with maliciou singnature</desc>
+        <filter part="data_type">600</filter>
+        <check_list>
+            <check_node type="EQU" part="data_type" separator="|" logic_type="OR">
+                <![CDATA[6001|6002|6003]]>
+            </check_node>
+        </check_list>
+        <node_designate></node_designate>
+        <del />
+        <action />
+        <alert_email />
+        <append type="static" append_field_name="alert_type_us">static_scan</append>
+        <append type="static" append_field_name="attack_id_list">T1020</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether the file is a test file first
+2. If it is not a business activity, please log in through root and clean up the files downloaded by [rm]
+3. Please combine the related alarms in the subordinate events and other alarm events on the machine as the context to judge the source of the intrusion entry and the affected scope, focusing on the modification and creation of the malicious file</append>
+    </rule>
+
+
+
+
+
+    <!-- Send task to endpoint on-write scanning webshell detection -->
+    <rule rule_id="webshell_detection_on_file_write" conn_id="" type="Detection" author="Elkeid">
+        <rule_name>webshell_detection_on_file_write</rule_name>
+        <harm_level>info</harm_level>
+        <alert_data>false</alert_data>
+        <node_designate></node_designate>
+        <filter part="data_type">602</filter>
+        <check_list>
+            <check_node part="file_path" type="END" separator="|" logic_type="OR" check_data_type="static">
+                <![CDATA[.php|.jsp|.asp|.cfm]]>
+            </check_node>
+            <check_node part="exe" type="NEND" separator="|" logic_type="AND" check_data_type="static">
+                <![CDATA[/git|/docker|/containerd|/dockerd|/tar]]>
+            </check_node>
+            <check_node part="sb_id" type="NI" separator="|" logic_type="AND" check_data_type="static">
+                <![CDATA[overlay|tmpfs]]>
+            </check_node>
+        </check_list>
+        <modify>WebshellWindow</modify>
+        <del></del>
+        <action>PushWebshellTaskToLeader</action>
+        <desc></desc>
+    </rule>
+
+</root>

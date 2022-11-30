@@ -1,0 +1,7 @@
+ProjectID: hids
+ProjectName: hids
+SmithDSL: |
+  INPUT.hids --> RULESET.hids_detect
+  RULESET.hids_detect --> RULESET.hids_filter
+  RULESET.hids_filter --> RULESET.hids_frequency_detect
+  RULESET.hids_frequency_detect --> RULESET.push_hids_alert

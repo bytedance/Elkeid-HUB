@@ -1,0 +1,150 @@
+<root ruleset_id="kube_workloads" ruleset_name="kube_workloads" undetected_discard="true" type="rule">
+    <!-- ........................................................... -->
+    <!-- ........................... Pods .......................... -->
+    <!-- ........................................................... -->
+
+    <rule rule_id="kube_create_pods" type="Detection" author="elkeid">
+        <rule_name>kube_create_pods</rule_name>
+        <harm_level>high</harm_level>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU">create</check_node>
+            <check_node part="event.objectRef.resource" type="EQU"><![CDATA[pods]]></check_node>
+            <check_node part="event.objectRef.subresource" type="NOTEXIST"></check_node>
+            <check_node part="event.requestObject.spec" type="ISEXIST"></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <action></action>
+        <desc affected_target="kube"></desc>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ..................... Deployments ......................... -->
+    <!-- ........................................................... -->
+
+    <rule rule_id="kube_create_workloads_deployments" type="Detection" author="elkeid">
+        <rule_name>kube_create_deployments</rule_name>
+        <harm_level>high</harm_level>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU" logic_type="or" separator="|"><![CDATA[create|update|patch]]></check_node>
+            <check_node part="event.objectRef.resource" type="EQU"  ><![CDATA[deployments]]></check_node>
+            <check_node part="event.requestObject.spec" type="ISEXIST"></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube"></desc>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ..................... Daemonsets .......................... -->
+    <!-- ........................................................... -->
+
+    <rule rule_id="kube_create_workloads_daemonsets" type="Detection" author="elkeid">
+        <rule_name>kube_create_daemonsets</rule_name>
+        <harm_level>high</harm_level>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU" separator="|"><![CDATA[create|update|patch]]></check_node>
+            <check_node part="event.objectRef.resource" type="EQU"><![CDATA[daemonsets]]></check_node>
+            <check_node part="event.requestObject.spec" type="ISEXIST"></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube"></desc>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ..................... Replicasets ......................... -->
+    <!-- ........................................................... -->
+
+    <rule rule_id="kube_create_workloads_replicasets" type="Detection" author="elkeid">
+        <rule_name>kube_create_replicasets</rule_name>
+        <harm_level>high</harm_level>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU" separator="|"><![CDATA[create|update|patch]]></check_node>
+            <check_node part="event.objectRef.resource" type="EQU"><![CDATA[replicasets]]></check_node>
+            <check_node part="event.requestObject.spec" type="ISEXIST"></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube"></desc>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ..................... StatefulSets ......................... -->
+    <!-- ........................................................... -->
+
+    <rule rule_id="kube_create_workloads_statefulsets" type="Detection" author="elkeid">
+        <rule_name>kube_create_statefulsets</rule_name>
+        <harm_level>high</harm_level>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU" separator="|"><![CDATA[create|update|patch]]></check_node>
+            <check_node part="event.objectRef.resource" type="EQU"><![CDATA[statefulsets]]></check_node>
+            <check_node part="event.requestObject.spec" type="ISEXIST"></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube"></desc>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ................ ReplicationControllers.................... -->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_workloads_replicationcontrollers" type="Detection" author="elkeid">
+        <rule_name>kube_create_replicationcontrollers</rule_name>
+        <harm_level>high</harm_level>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU" separator="|"><![CDATA[create|update|patch]]></check_node>
+            <check_node part="event.objectRef.resource" type="EQU"><![CDATA[replicationcontrollers]]></check_node>
+            <check_node part="event.requestObject.spec" type="ISEXIST"></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube"></desc>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ............................ Cronjobs ..................... -->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_workloads_cronjobs" type="Detection" author="elkeid">
+        <rule_name>kube_create_cronjobs</rule_name>
+        <harm_level>high</harm_level>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU" separator="|"><![CDATA[create|update|patch]]></check_node>
+            <check_node part="event.objectRef.resource" type="EQU"><![CDATA[cronjobs]]></check_node>
+            <check_node part="event.requestObject.spec" type="ISEXIST"></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube"></desc>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ............................ Jobs ......................... -->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_workloads_jobs" type="Detection" author="elkeid">
+        <rule_name>kube_create_jobs</rule_name>
+        <harm_level>high</harm_level>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU" separator="|"><![CDATA[create|update|patch]]></check_node>
+            <check_node part="event.objectRef.resource" type="EQU"><![CDATA[jobs]]></check_node>
+            <check_node part="event.requestObject.spec" type="ISEXIST"></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube"></desc>
+    </rule>
+</root>

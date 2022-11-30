@@ -1,0 +1,46 @@
+<root ruleset_name="hids_frequency_detect" type="rule" undetected_discard="false" ruleset_id="hids_frequency_detect">
+    <rule rule_id="pipe_shell_detect" author="Elkeid" type="Frequency">
+        <rule_name>Double-piped reverse shell</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>high</harm_level>
+        <desc kill_chain_id="persistent" affected_target="host_process">Double-piped reverse shell</desc>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">pipe_shell_</filter>
+        <check_list>
+        </check_list>
+        <node_designate>
+            <node part="agent_id" />
+            <node part="ppid" />
+        </node_designate>
+        <threshold range="5" count_type="classify" count_field="argv" local_cache="true">3</threshold>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">persistent</append>
+        <append type="static" append_field_name="attack_id_list">T1059</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether there is any known penetration testing behavior
+2. If it is not a business activity, please log in as root and use the [ps aux | grep $PID] command (where $PID is the process ID in the alarm) to check whether the process is alive
+3. Clean up the files of the [rm] startup process, and close the rebound process [kill -9 $PID]
+4. If the destination IP in [Connection Information] is not the main business IP, it is recommended to block access requests to malicious IPs
+5. Please combine the related alarms in the subordinate events and the traceability data of the current alarm as the context to determine the source of the intrusion entry and the affected scope</append>
+    </rule>
+    <rule rule_id="bruteforce_success_detect" author="Elkeid" type="Frequency">
+        <rule_name>Bruteforce success</rule_name>
+        <alert_data>True</alert_data>
+        <harm_level>critical</harm_level>
+        <desc kill_chain_id="persistent" affected_target="host_process">Bruteforce login attempt ended with succesful password login</desc>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">bruteforce_success_</filter>
+        <check_list></check_list>
+        <node_designate>
+            <node part="agent_id" />
+            <node part="sip" />
+        </node_designate>
+        <threshold range="120" local_cache="true" hit_reset="true" count_type="classify" count_field="status">2</threshold>
+        <del />
+        <action />
+        <append type="static" append_field_name="alert_type_us">bruteforce</append>
+        <append type="static" append_field_name="attack_id_list">T1572</append>
+        <append type="static" append_field_name="suggestion">1. Please confirm whether it is triggered by multiple failed logins of the business
+2. For non-business activities, please log in through root, and use the [passwd $USER] command to modify and strengthen the corresponding user password
+3. Query all sshd login trigger processes [ps aux | grep sshd], and close the process corresponding to the logged in user [kill -9 $PID]
+4. Disable password login by modifying the [/etc/ssh/sshd_config] configuration file and restarting the sshd service</append>
+    </rule>
+</root>

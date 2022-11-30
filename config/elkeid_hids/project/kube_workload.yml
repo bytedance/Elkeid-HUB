@@ -1,0 +1,10 @@
+ProjectID: kube_workload
+ProjectName: kube_workload
+SmithDSL: |
+  INPUT.k8s --> RULESET.kube_workloads
+  RULESET.kube_workloads --> RULESET.kube_filter_workloads
+  RULESET.kube_filter_workloads --> RULESET.kube_handle_workloads
+  RULESET.kube_handle_workloads --> RULESET.kube_detect_workloads
+  RULESET.kube_detect_workloads  --> RULESET.kube_alert_info
+  RULESET.kube_alert_info --> RULESET.kube_add_cluster_info
+  RULESET.kube_add_cluster_info --> RULESET.kube_push_alert

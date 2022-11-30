@@ -1,0 +1,12 @@
+<root ruleset_id="kube_add_cluster_info" ruleset_name="kube_add_cluster_info" undetected_discard="true" type="rule">
+    <rule rule_id="kube_add_cluster_info" type="Detection" author="elkeid">
+        <rule_name>kube_add_cluster_info</rule_name>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">alert</filter>
+        <check_list>
+        </check_list>
+        <append />
+        <action></action>
+        <modify>KubeAddClusterInfo</modify>
+        <alert_email />
+    </rule>
+</root>

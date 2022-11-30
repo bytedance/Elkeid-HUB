@@ -1,0 +1,129 @@
+<root ruleset_id="kube_detect" ruleset_name="kube_detect" undetected_discard="true" type="rule">
+
+    <!-- ........................................................... -->
+    <!-- ................. anonymous user access ....................-->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_anonymous_user_access" type="Detection" author="elkeid">
+        <rule_name>kube_anonymous_user_access</rule_name>
+        <harm_level></harm_level>
+        <threshold count_type="count" count_field="" range="0" hit_reset="false" local_cache="false"></threshold>
+        <node_designate></node_designate>
+        <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.user.username" type="EQU"><![CDATA[system:anonymous]]></check_node>
+            <check_node part="event.userAgent" type="START" logic_type="or" separator="|"><![CDATA[kubectl|curl]]></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube">匿名用户访问</desc>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- .......... authentication/authorization failure rules ......-->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_get_secrets_authentication_fail" type="Detection" author="elkeid">
+        <rule_name>kube_get_secrets_authentication_fail</rule_name>
+        <harm_level>low</harm_level>
+        <threshold count_type="count" count_field="" range="0" hit_reset="false" local_cache="false"></threshold>
+        <node_designate></node_designate>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU" logic_type="or" separator="|"> <![CDATA[get|list]]></check_node>
+            <check_node part="event.objectRef.resource" type="EQU"> <![CDATA[secrets]]></check_node>
+            <check_node part="event.responseStatus.code" type="EQU"> <![CDATA[401]]></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube">枚举/获取 secrets，认证失败</desc>
+    </rule>
+
+    <rule rule_id="kube_get_secrets_authorization_fail" type="Detection" author="elkeid">
+        <rule_name>kube_get_secrets_authorization_fail</rule_name>
+        <harm_level>medium</harm_level>
+        <threshold count_type="count" count_field="" range="0" hit_reset="false" local_cache="false"></threshold>
+        <node_designate></node_designate>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU" logic_type="or" separator="|"> <![CDATA[get|list]]></check_node>
+            <check_node part="event.objectRef.resource" type="EQU"> <![CDATA[secrets]]></check_node>
+            <check_node part="event.responseStatus.code" type="EQU"> <![CDATA[403]]></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube">枚举/获取 secrets，授权失败</desc>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ........................ abuse credential rules ............-->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_abuse_serviceaccount_with_kubectl" type="Detection" author="elkeid">
+        <rule_name>kube_abuse_serviceaccount_with_kubectl</rule_name>
+        <harm_level>critical</harm_level>
+        <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.user.username" type="START"><![CDATA[system:serviceaccount:]]></check_node>
+            <check_node part="event.userAgent" type="START"><![CDATA[kubectl]]></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube">利用 kubectl 滥用 ServiceAccount </desc>
+    </rule>
+
+
+    <!-- ........................................................... -->
+    <!-- ........................ CVE-2020-8554 .....................-->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_externalIPs_service" type="Detection" author="elkeid">
+        <rule_name>kube_create_externalIPs_service</rule_name>
+        <harm_level></harm_level>
+        <threshold count_type="count" count_field="" range="0" hit_reset="false" local_cache="false"></threshold>
+        <node_designate></node_designate>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU" logic_type="or" separator="|"> <![CDATA[create|update]]></check_node>
+            <check_node part="event.objectRef.resource" type="EQU"> <![CDATA[services]]></check_node>
+            <check_node part="event.requestObject.spec.externalIPs" type="ISEXIST"></check_node>
+            <check_node part="event.requestObject.spec.type" type="EQU"> <![CDATA[ClusterIP]]></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <modify></modify>
+        <action></action>
+        <desc affected_target="kube">创建、更新 Service 并设置 externalIPs</desc>
+    </rule>
+    <rule rule_id="kube_create_insecure_clusterrolebinding" type="Detection" author="elkeid">
+        <rule_name>kube_create_insecure_clusterrolebinding</rule_name>
+        <harm_level>high</harm_level>
+         <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU"> <![CDATA[create]]></check_node>
+            <check_node part="event.objectRef.resource" type="EQU"> <![CDATA[clusterrolebindings]]></check_node>
+            <check_node part="event.requestObject.roleRef.kind" type="EQU"> <![CDATA[ClusterRole]]></check_node>
+            <check_node part="event.requestObject.roleRef.name" type="EQU" logic_type="or" separator="|"> <![CDATA[cluster-admin|admin|edit|view]]></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+         <modify></modify>
+        <action></action>
+        <desc affected_target="kube">创建绑定大权限 ClusterRole 的 ClusterRoleBinding</desc>
+    </rule>
+        <rule rule_id="kube_pods_exec_regular_command" type="Detection" author="elkeid">
+        <rule_name>kube_pods_exec_regular_command</rule_name>
+        <harm_level>high</harm_level>
+        <filter part="data_type">9003</filter>
+        <check_list>
+            <check_node part="event.verb" type="EQU">create</check_node>
+            <check_node part="event.objectRef.resource" type="EQU">pods</check_node>
+            <check_node part="event.objectRef.subresource" type="EQU" logic_type="or" separator="|">
+                <![CDATA[exec|run]]>
+            </check_node>
+            <check_node part="event.stage" type="EQU"><![CDATA[ResponseStarted]]></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+         <modify></modify>
+        <action></action>
+        <desc affected_target="kube">在 pods 内执行命令</desc>
+    </rule>
+</root>

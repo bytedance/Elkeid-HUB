@@ -30,7 +30,7 @@ Elkeid HUB 是一款由 Elkeid Team 维护的规则/事件处理引擎，支持�
 * 支持外部系统/数据联动
 
 ## Elkeid Internal Best Practices
-* 使用 Elkeid HUB 处理 Elkeid HIDS/RASP/Sandbox/K8s auditing 等原始数据，TPS 12亿条+/秒，HUB 调度实例 6000+
+* 使用 Elkeid HUB 处理 Elkeid HIDS/RASP/Sandbox/K8s auditing 等原始数据，TPS 1.2亿条+/秒，HUB 调度实例 6000+
 
 ## Elkeid-HUB Function List
 

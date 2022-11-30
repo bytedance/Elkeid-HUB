@@ -1,0 +1,432 @@
+<root ruleset_name="hids_filter" type="whitelist" undetected_discard="false" ruleset_id="hids_filter">
+	<rule rule_id="reverse_shell_filter1" author="Elkeid" type="Detection">
+		<rule_name>reverse_shell_filter1</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">reverse_shell_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="pgid_argv">
+				<![CDATA[tmux]]>
+			</check_node>
+		</check_list>
+	</rule>
+	<rule rule_id="reverse_shell_filter2" author="Elkeid" type="Detection">
+		<rule_name>reverse_shell_filter2</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">reverse_shell_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="ppid_argv">
+				<![CDATA[tmux]]>
+			</check_node>
+		</check_list>
+	</rule>
+	<rule rule_id="reverse_shell_filter3" author="Elkeid" type="Detection">
+		<rule_name>reverse_shell_filter3</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">reverse_shell_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="pid_tree">
+				<![CDATA[tmux]]>
+			</check_node>
+		</check_list>
+	</rule>
+
+	<rule rule_id="binary_file_hijack_filter" author="Elkeid" type="Detection">
+		<rule_name>binary_file_hijack_filter</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">binary_file_hijack_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="pid_tree" logic_type="or" separator="|">
+				<![CDATA[docker|container|make|yum|apt|rpm|dpkg]]>
+			</check_node>
+		</check_list>
+	</rule>
+
+	<rule rule_id="user_credential_escalation_filter" author="Elkeid" type="Detection">
+		<rule_name>user_credential_escalation_filter</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">user_credential_escalation_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="exe" logic_type="or" separator="|">
+				<![CDATA[/bin/sudo|/bin/su|sshd|exim|atc|pmdas|systemd|container|login|chsh]]>
+			</check_node>
+		</check_list>
+	</rule>
+
+
+	<rule rule_id="consul_rce_filter" author="Elkeid" type="Detection">
+		<rule_name>consul_rce_filter</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_consul_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="pid_tree">
+				<![CDATA[check_systemd]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="consul_rce_filter2" author="Elkeid" type="Detection">
+		<rule_name>consul_rce_filter2</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_consul_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[nohup]]>
+			</check_node>
+			<check_node type="INCL" part="argv">
+				<![CDATA[/opt/consul/]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+
+
+	<rule rule_id="mysql_rce_filter" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[nohup nice]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter2" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter2</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[rm -rf /tmp/tmp]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter3" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter3</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[nohup]]>
+			</check_node>
+			<check_node type="INCL" part="argv">
+				<![CDATA[mysqld]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter4" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter4</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[mysql_backup]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter5" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter5</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[storage/tos]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter6" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter6</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[mysql/log]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter7" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter7</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[nohup nice]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter8" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter8</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[itc_db_backup]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter9" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter9</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[sudo -nv]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter10" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter10</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[sudo -nv]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter11" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter11</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="pid_tree">
+				<![CDATA[mysql.test]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter12" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter12</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="pid_tree">
+				<![CDATA[mysqld_safe]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter13" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter13</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="pid_tree">
+				<![CDATA[apt-]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter14" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter14</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="pid_tree">
+				<![CDATA[report_mysql_th]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter15" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter15</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="pid_tree">
+				<![CDATA[hms_sg_mysql_re]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="mysql_rce_filter16" author="Elkeid" type="Detection">
+		<rule_name>mysql_rce_filter16</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">suspicious_rce_from_mysql_service_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="pid_tree">
+				<![CDATA[php7.1-mysql.po]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+
+	<rule rule_id="reverse_shell_filter_python" author="Elkeid" type="Detection">
+		<rule_name>reverse_shell_filter_python</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">reverse_shell_detect_python</filter>
+		<check_list>
+			<check_node type="INCL" part="argv" logic_type="or" separator="|">
+				<![CDATA[script_consumer|-exec-|pip-install|setuptools]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+
+	<rule rule_id="reverse_shell_filter_argv" author="Elkeid" type="Detection">
+		<rule_name>reverse_shell_filter_argv</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">reverse_shell_detect_argv</filter>
+		<check_list>
+			<check_node type="INCL" part="argv" logic_type="or" separator="|">
+				<![CDATA[-version|-help]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+
+	<rule rule_id="reverse_shell_filter_exec" author="Elkeid" type="Detection">
+		<rule_name>reverse_shell_filter_exec</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">reverse_shell_detect_exec</filter>
+		<check_list>
+			<check_node type="INCL" part="pid_tree" logic_type="or" separator="|">
+				<![CDATA[tmux|make|install]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+
+	<rule rule_id="pipe_shell_connection_filter" author="Elkeid" type="Detection">
+		<rule_name>pipe_shell_connection_filter</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">pipe_shell_connection_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="dip">
+				<![CDATA[127.0.0.]]>
+			</check_node>
+		</check_list>
+	</rule>
+
+	<rule rule_id="container_escape_mount_drive_filter" author="Elkeid" type="Detection">
+		<rule_name>container_escape_mount_drive_filter</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">container_escape_mount_drive_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="argv">
+				<![CDATA[/var/lib/os-prober]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+
+	<rule rule_id="signature_scan_maliciou_files_filter1" author="Elkeid" type="Detection">
+		<rule_name>signature_scan_maliciou_files_filter1</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">signature_scan_maliciou_files_detect</filter>
+		<check_list>
+			<check_node type="NEQ" part="data_type">
+				<![CDATA[6003]]>
+			</check_node>
+			<check_node type="START" part="types">
+				<![CDATA[Php]]>
+			</check_node>
+			<check_node type="NEND" part="static_file">
+				<![CDATA[.php]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="signature_scan_maliciou_files_filter2" author="Elkeid" type="Detection">
+		<rule_name>signature_scan_maliciou_files_filter2</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">signature_scan_maliciou_files_detect</filter>
+		<check_list>
+			<check_node type="NEQ" part="data_type">
+				<![CDATA[6003]]>
+			</check_node>
+			<check_node type="START" part="types">
+				<![CDATA[Jsp]]>
+			</check_node>
+			<check_node type="NEND" part="static_file">
+				<![CDATA[.jsp]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="signature_scan_maliciou_files_filter3" author="Elkeid" type="Detection">
+		<rule_name>signature_scan_maliciou_files_filter3</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">signature_scan_maliciou_files_detect</filter>
+		<check_list>
+			<check_node type="NEQ" part="data_type">
+				<![CDATA[6003]]>
+			</check_node>
+			<check_node type="START" part="types">
+				<![CDATA[Asp]]>
+			</check_node>
+			<check_node type="NEND" part="static_file">
+				<![CDATA[.asp]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="signature_scan_maliciou_files_filter4" author="Elkeid" type="Detection">
+		<rule_name>signature_scan_maliciou_files_filter4</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">signature_scan_maliciou_files_detect</filter>
+		<check_list>
+			<check_node type="NEQ" part="data_type">
+				<![CDATA[6003]]>
+			</check_node>
+			<check_node type="START" part="types">
+				<![CDATA[Cfm]]>
+			</check_node>
+			<check_node type="NEND" part="static_file">
+				<![CDATA[.cfm]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="signature_scan_maliciou_files_filter5" author="Elkeid" type="Detection">
+		<rule_name>signature_scan_maliciou_files_filter5</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">signature_scan_maliciou_files_detect</filter>
+		<check_list>
+			<check_node type="INCL" part="types">
+				<![CDATA[not_detected]]>
+			</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="signature_scan_maliciou_files_filter6" author="Elkeid" type="Detection">
+		<rule_name>signature_scan_maliciou_files_filter6</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">signature_scan_maliciou_files_detect</filter>
+		<check_list>
+			<check_node type="NOTNULL" part="error"></check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="signature_scan_maliciou_files_filter7" author="Elkeid" type="Detection">
+		<rule_name>signature_scan_maliciou_files_filter7</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">signature_scan_maliciou_files_detect</filter>
+		<check_list>
+			<check_node type="ISNULL" part="types"></check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+
+	<rule rule_id="upx_exe_white_list" conn_id="" type="Detection" author="Elkeid">
+		<rule_name>upx_exe_white_list</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">signature_scan_maliciou_files_detect</filter>
+		<check_list>
+			<check_node part="name" type="EQU" check_data_type="static">UpxDetail</check_node>
+			<check_node part="static_file" type="END" separator="|" logic_type="OR" check_data_type="static">clamscan|clamd|clambc|clamtop|clamconf|clamdscan|sigtool|clamonacc</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="old_version_report" conn_id="" type="Detection" author="Elkeid">
+		<rule_name>old_version_report</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">signature_scan_maliciou_files_detect</filter>
+		<check_list>
+			<check_node part="types" type="EQU" separator="|" logic_type="OR" check_data_type="static">ZeroSizeSection|BadSectionOff|suspicious_script</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+	<rule rule_id="exe_white_list" conn_id="" type="Detection" author="Elkeid">
+		<rule_name>exe_white_list</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">signature_scan_maliciou_files_detect</filter>
+		<check_list>
+			<check_node part="static_file" type="INCL" separator="|" logic_type="OR" check_data_type="static">/inputattach|elkeid</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+
+	<rule rule_id="exe_kernel_src" type="Detection" author="Elkeid">
+		<rule_name>exe_kernel_src</rule_name>
+		<filter part="data_type">600</filter>
+		<check_list>
+			<check_node part="static_file" type="INCL" check_data_type="static">/usr/src</check_node>
+			<check_node part="static_file" type="INCL" check_data_type="static">stowaway</check_node>
+		</check_list>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+
+	<rule rule_id="exe_github_php" type="Detection" author="Elkeid">
+		<rule_name>exe_github_php</rule_name>
+		<filter part="data_type">600</filter>
+		<check_list>
+			<check_node part="static_file" type="INCL" check_data_type="static">/github.com/</check_node>
+			<check_node part="static_file" type="INCL" separator="|" logic_type="OR" check_data_type="static">/google/flatbuffers@|/apache/thrift@</check_node>
+		</check_list>
+		<alert_data>false</alert_data>
+		<append append_field_name="" rely_part="" type="none" />
+	</rule>
+
+</root>

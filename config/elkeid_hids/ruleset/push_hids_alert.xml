@@ -1,0 +1,17 @@
+<root ruleset_id="push_hids_alert" ruleset_name="push_hids_alert" undetected_discard="true" type="rule">
+    <rule rule_id="push_alert_1" type="Detection" author="Elkeid">
+        <rule_name>push_alert_1</rule_name>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">detect</filter>
+        <check_list>
+        </check_list>
+        <append />
+        <action>PushMsgToLeader</action>
+        <del />
+        <alert_email />
+        <desc affected_target="tip">Push_Alert_to_Console</desc>
+        <append type="FIELD" rely_part="SMITH_ALERT_DATA.RULE_INFO.HarmLevel" append_field_name="harm_level"></append>
+        <append type="FIELD" rely_part="SMITH_ALERT_DATA.RULE_INFO.RuleName" append_field_name="rule_name"></append>
+    </rule>
+
+
+</root>

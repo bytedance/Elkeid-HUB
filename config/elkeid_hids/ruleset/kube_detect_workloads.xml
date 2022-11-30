@@ -1,0 +1,50 @@
+<root ruleset_id="kube_detect_workloads" ruleset_name="kube_detect_workloads" undetected_discard="true" type="rule">
+    <!-- ........................................................... -->
+    <!-- .................... privileged pods  ..................... -->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_privileged_pods" type="Detection" author="elkeid">
+        <rule_name>kube_create_privileged_pods</rule_name>
+        <harm_level>high</harm_level>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_pods</filter>
+        <check_list>
+            <check_node part="privileged" type="EQU">true</check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <action></action>
+        <desc affected_target="kube">创建特权容器</desc>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ............... mount sensitive host paths  ............... -->
+    <!-- ........................................................... -->
+
+    <rule rule_id="kube_create_mounted_host_path_workloads_readwrite" type="Detection" author="elkeid">
+        <rule_name>kube_create_mounted_host_path_workloads_readwrite</rule_name>
+        <harm_level>high</harm_level>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create</filter>
+        <check_list>
+            <check_node part="read_write_mounts[_]" type="EQU" logic_type="or" separator="|">
+                <![CDATA[/|/proc|/sys|/sys/fs/cgroup|/run|/var/run]]>
+            </check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <action></action>
+        <desc affected_target="kube">创建挂载宿主机敏感目录的容器</desc>
+    </rule>
+
+
+    <!-- ............................................................. -->
+    <!-- ...... workloads that share pid namespace with the host ...... -->
+    <!-- .............................................................. -->
+    <rule rule_id="kube_create_shared_host_pid_workloads" type="Detection" author="elkeid">
+        <rule_name>kube_create_shared_host_pid_workloads</rule_name>
+        <harm_level>high</harm_level>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_pods</filter>
+        <check_list>
+            <check_node part="shared_namespaces[_]" type="INCL">PID</check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <action></action>
+        <desc affected_target="kube">创建共享宿主机 PID Namespace 的工作负载</desc>
+    </rule>
+</root>

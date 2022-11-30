@@ -1,0 +1,99 @@
+<root ruleset_id="kube_filter_workloads" ruleset_name="kube_filter_internal_workloads" undetected_discard="true" type="whitelist">
+    <!-- ........................................................... -->
+    <!-- ...filter the pods created by deployment or replicaset .....-->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_pods_indirectly_whitelist_0" type="Detection" author="elkeid">
+        <rule_name>kube_create_pods_indirectly_whitelist_0</rule_name>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_pods</filter>
+        <check_list>
+            <check_node part="event.user.username" type="EQU"><![CDATA[system:serviceaccount:kube-system:replicaset-controller]]></check_node>
+            <check_node part="event.requestObject.metadata.ownerReferences" type="ISEXIST"></check_node>
+            <check_node part="event.requestObject.metadata.generateName" type="ISEXIST"></check_node>
+            <check_node part="event.userAgent" type="END"><![CDATA[system:serviceaccount:kube-system:replicaset-controller]]></check_node>
+        </check_list>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ............ filter the pods created by daemonset .........-->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_pods_indirectly_whitelist_1" type="Detection" author="elkeid">
+        <rule_name>kube_create_pods_indirectly_whitelist_1</rule_name>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_pods</filter>
+        <check_list>
+            <check_node part="event.user.username" type="EQU"><![CDATA[system:serviceaccount:kube-system:daemon-set-controller]]></check_node>
+            <check_node part="event.requestObject.metadata.ownerReferences" type="ISEXIST"></check_node>
+            <check_node part="event.requestObject.metadata.generateName" type="ISEXIST"></check_node>
+            <check_node part="event.userAgent" type="END"><![CDATA[system:serviceaccount:kube-system:daemon-set-controller]]></check_node>
+        </check_list>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ............ filter the pods created by statefulsets.........-->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_pods_indirectly_whitelist_2" type="Detection" author="elkeid">
+        <rule_name>kube_create_pods_indirectly_whitelist_2</rule_name>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_pods</filter>
+        <check_list>
+            <check_node part="event.user.username" type="EQU"><![CDATA[system:serviceaccount:kube-system:statefulset-controller]]></check_node>
+            <check_node part="event.requestObject.metadata.ownerReferences" type="ISEXIST"></check_node>
+            <check_node part="event.requestObject.metadata.generateName" type="ISEXIST"></check_node>
+            <check_node part="event.userAgent" type="END"><![CDATA[system:serviceaccount:kube-system:statefulset-controller]]></check_node>
+        </check_list>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- .... filter the pods created by replicationcontrollers......-->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_pods_indirectly_whitelist_replicationcontrollers" type="Detection" author="elkeid">
+        <rule_name>kube_create_pods_indirectly_whitelist_replicationcontrollers</rule_name>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_pods</filter>
+        <check_list>
+            <check_node part="event.user.username" type="EQU"><![CDATA[system:serviceaccount:kube-system:replication-controller]]></check_node>
+            <check_node part="event.requestObject.metadata.ownerReferences" type="ISEXIST"></check_node>
+            <check_node part="event.requestObject.metadata.generateName" type="ISEXIST"></check_node>
+            <check_node part="event.userAgent" type="END"><![CDATA[system:serviceaccount:kube-system:replication-controller]]></check_node>
+        </check_list>
+    </rule>
+
+
+    <!-- ........................................................... -->
+    <!-- ........ filter the replicasets created by deployments ......-->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_replicasets_indirectly_whitelist_0" type="Detection" author="elkeid">
+        <rule_name>kube_create_replicasets_indirectly_whitelist</rule_name>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_workloads_replicasets</filter>
+        <check_list>
+            <check_node part="event.requestObject.metadata.ownerReferences" type="ISEXIST"></check_node>
+            <check_node part="event.user.username" type="EQU"><![CDATA[system:serviceaccount:kube-system:deployment-controller]]></check_node>
+            <check_node part="event.userAgent" type="END"><![CDATA[system:serviceaccount:kube-system:deployment-controller]]></check_node>
+        </check_list>
+    </rule>
+
+
+    <!-- ........................................................... -->
+    <!-- ...filter the pods created by cronjobs or jobs .............-->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_pods_indirectly_by_job_controller" type="Detection" author="elkeid">
+        <rule_name>kube_create_pods_indirectly_by_job_controller</rule_name>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_pods</filter>
+        <check_list>
+            <check_node part="event.user.username" type="EQU"><![CDATA[system:serviceaccount:kube-system:job-controller]]></check_node>
+            <check_node part="event.requestObject.metadata.ownerReferences" type="ISEXIST"></check_node>
+            <check_node part="event.requestObject.metadata.generateName" type="ISEXIST"></check_node>
+            <check_node part="event.userAgent" type="END"><![CDATA[system:serviceaccount:kube-system:job-controller]]></check_node>
+        </check_list>
+    </rule>
+
+    <!-- ........................................................... -->
+    <!-- ............ filter the jobs created by cronjobs ..........-->
+    <!-- ........................................................... -->
+    <rule rule_id="kube_create_jobs_indirectly_by_cronjob_controller" type="Detection" author="elkeid">
+        <rule_name>kube_create_jobs_indirectly_by_cronjob_controller</rule_name>
+        <filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_workloads_jobs</filter>
+        <check_list>
+            <check_node part="event.requestObject.metadata.ownerReferences" type="ISEXIST"></check_node>
+            <check_node part="event.user.username" type="EQU"><![CDATA[system:serviceaccount:kube-system:cronjob-controller]]></check_node>
+            <check_node part="event.userAgent" type="END"><![CDATA[system:serviceaccount:kube-system:cronjob-controller]]></check_node>
+        </check_list>
+    </rule>
+</root>
