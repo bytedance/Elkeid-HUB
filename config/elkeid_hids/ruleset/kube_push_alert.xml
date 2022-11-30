@@ -1,0 +1,13 @@
+<root ruleset_id="kube_push_alert" ruleset_name="kube_push_alert" undetected_discard="true" type="rule">
+	<rule rule_id="kube_push_alert" type="Detection" author="elkeid">
+		<rule_name>kube_push_alert</rule_name>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">alert</filter>
+		<check_list>
+		</check_list>
+		<append />
+		<action>KubePushMsgToLeader</action>
+		<del>SMITH_ALERT_DATA.HIT_DATA</del>
+		<alert_email />
+		<desc affected_target="tip">告警数据调整格式</desc>
+	</rule>
+</root>

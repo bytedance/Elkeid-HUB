@@ -1,0 +1,11 @@
+<root ruleset_id="kube_handle_workloads" ruleset_name="kube_handle_workloads" undetected_discard="" type="rule">
+    <rule rule_id="kube_handle_workloads" type="Detection" author="elkeid">
+        <rule_name>kube_handle_workloads</rule_name>
+        <harm_level></harm_level>
+        <check_list>
+        </check_list>
+        <modify>KubeWorkloads</modify>
+        <action></action>
+        <desc affected_target="kube"></desc>
+    </rule>
+</root>

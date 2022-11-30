@@ -1,0 +1,14 @@
+<root ruleset_id="push_rasp_alert" ruleset_name="push_rasp_alert" type="Rule" undetected_discard="true" debug="false" task_id="" full_collect_rules="">
+  <rule rule_id="push_alert_1" type="Detection" author="lez">
+    <rule_name>push_alert_1</rule_name>
+    <harm_level></harm_level>
+    <filter part=""></filter>
+    <check_list></check_list>
+    <alert_data>false</alert_data>
+    <modify></modify>
+    <action>PushRaspAlertToLeader</action>
+    <append type="field" rely_part="SMITH_ALERT_DATA.RULE_INFO.RuleName" append_field_name="rule_name"></append>
+    <append type="field" rely_part="SMITH_ALERT_DATA.RULE_INFO.HarmLevel" append_field_name="HarmLevel"></append>
+    <desc affected_target="http"></desc>
+  </rule>
+</root>

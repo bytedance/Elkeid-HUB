@@ -1,0 +1,7 @@
+ProjectID: kube_example
+ProjectName: kube_example
+SmithDSL: |
+  INPUT.k8s --> RULESET.kube_detect
+  RULESET.kube_detect --> RULESET.kube_alert_info
+  RULESET.kube_alert_info --> RULESET.kube_add_cluster_info
+  RULESET.kube_add_cluster_info --> RULESET.kube_push_alert

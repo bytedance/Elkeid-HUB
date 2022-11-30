@@ -1,0 +1,18 @@
+<root ruleset_id="rasp_handle_rawdata" ruleset_name="rasp_handle_rawdata" type="Rule" undetected_discard="true" enable_compress_index="true">
+    <rule rule_id="rasp_handle_rawdata1" type="Detection" author="xch">
+        <rule_name>rasp_handle_rawdata1</rule_name>
+        <harm_level>info</harm_level>
+        <threshold count_type="count"></threshold>
+        <node_designate></node_designate>
+        <filter part=""></filter>
+        <check_list>
+            <check_node part="data_type" type="MT" check_data_type="static">1999</check_node>
+            <check_node part="data_type" type="LT" check_data_type="static">3000</check_node>
+        </check_list>
+        <alert_data>false</alert_data>
+        <modify>RASPHandleRawData</modify>
+        <del></del>
+        <action></action>
+        <desc></desc>
+    </rule>
+</root>

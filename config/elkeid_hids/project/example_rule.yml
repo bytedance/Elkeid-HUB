@@ -1,7 +1,0 @@
-ProjectID: example_rule
-ProjectName: example_rule
-SmithDSL: |
-  INPUT.elkeid --> RULESET.detection
-  RULESET.detection --> RULESET.filter
-  RULESET.filter --> RULESET.frequency
-  RULESET.frequency --> OUTPUT.alert

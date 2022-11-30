@@ -1,0 +1,122 @@
+<root ruleset_id="rasp_detect" ruleset_name="rasp_detect" type="Rule" undetected_discard="true">
+
+    <rule rule_id="rasp_detect_java_process_exec_cmd_from_jsp" type="Detection" author="xch">
+        <rule_name>JSP Command Execution</rule_name>
+        <harm_level>critical</harm_level>
+        <filter part="runtime">JVM</filter>
+        <check_list>
+            <check_node part="class_id" type="EQU" separator="|" logic_type="OR" check_data_type="static">0|10</check_node>
+            <check_node part="stack_trace" type="INCL" check_data_type="static">org.apache.jsp.</check_node>
+            <check_node part="stack_trace" type="INCL" check_data_type="static">_jspService</check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <append type="STATIC" append_field_name="alert_type">代码执行</append>
+        <append type="STATIC" append_field_name="alert_type_us"><![CDATA[Code Execution]]></append>
+        <append type="STATIC" append_field_name="attack_id_list">T1203</append>
+        <append type="STATIC" append_field_name="suggestion"><![CDATA[Suspected that JVM runtime has been attacked and used to execute commands.
+Execution entrypoint can be confirmed through the alarm stack trace information.]]></append>
+        <modify></modify>
+        <del></del>
+        <action></action>
+        <desc affected_target="rasp">Discover the behavior of command execution from java server pages</desc>
+    </rule>
+
+    <rule rule_id="rasp_detect_java_log4j_jndi_behavior" type="Detection" author="xch">
+        <rule_name>Log4j Exploit</rule_name>
+        <harm_level>critical</harm_level>
+        <filter part="runtime">JVM</filter>
+        <check_list>
+            <check_node part="stack_trace" type="INCL" check_data_type="static">org.apache.logging.log4j.core.net.JndiManager.lookup</check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <append type="STATIC" append_field_name="alert_type">代码执行</append>
+        <append type="STATIC" append_field_name="alert_type_us"><![CDATA[Code Execution]]></append>
+        <append type="STATIC" append_field_name="attack_id_list">T1203</append>
+        <append type="STATIC" append_field_name="suggestion"><![CDATA[There is an arbitrary code execution vulnerability in Apache Log4j, which can be easily exploited by attackers.
+Please upgrade related components.
+Execution entrypoint can be confirmed through the alarm stack trace information.]]></append>
+        <modify></modify>
+        <del></del>
+        <action></action>
+        <desc affected_target="rasp">Detected exploit process for log4j</desc>
+    </rule>
+
+    <rule rule_id="rasp_detect_java_webshell_behavior" type="Detection" author="xch">
+        <rule_name>WebShell Behavior Detect</rule_name>
+        <harm_level>critical</harm_level>
+        <filter part="runtime">JVM</filter>
+        <check_list>
+            <check_node part="stack_trace" type="INCL" separator="|" logic_type="OR" check_data_type="static">net.rebeyond.|(payload.java|.equals(FileOperation.java|.equals(Cmd.java|.equals(MemShell.java|.equals(SocksProxy.java|.equals(PortMap.java|.equals(ReversePortMap.java|.equals(Scan.java</check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <append type="STATIC" append_field_name="alert_type">异常行为</append>
+        <append type="STATIC" append_field_name="alert_type_us"><![CDATA[Abnormal Runtime Behavior]]></append>
+        <append type="STATIC" append_field_name="attack_id_list">T1083</append>
+        <append type="STATIC" append_field_name="suggestion"><![CDATA[Suspected WebShell behavior found in JVM runtime.
+Execution entrypoint can be confirmed through the alarm stack trace information.]]></append>
+        <modify></modify>
+        <del></del>
+        <action></action>
+        <desc affected_target="rasp">Suspected WebShell-like behavior found in JVM runtime</desc>
+    </rule>
+
+    <rule rule_id="rasp_detect_java_process_fastjson_rce" type="Detection" author="xch">
+        <rule_name>Command Execution Caused By FastJson Deserialization</rule_name>
+        <harm_level>critical</harm_level>
+        <filter part="runtime">JVM</filter>
+        <check_list>
+            <check_node part="class_id" type="EQU" separator="|" logic_type="OR" check_data_type="static">0|10</check_node>
+            <check_node part="stack_trace" type="INCL" separator="|" logic_type="OR" check_data_type="static">com.alibaba.fastjson.JSON.parse</check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <append type="STATIC" append_field_name="alert_type">代码执行</append>
+        <append type="STATIC" append_field_name="alert_type_us"><![CDATA[Code Execution]]></append>
+        <append type="STATIC" append_field_name="attack_id_list">T1203</append>
+        <append type="STATIC" append_field_name="suggestion"><![CDATA[Please confirm command execution impact, usually due to FastJson version being non-secure minimum.
+Execution entrypoint can be confirmed through the alarm stack trace information.]]></append>
+        <modify></modify>
+        <del></del>
+        <action></action>
+        <desc affected_target="rasp">FastJson deserializes attacker-constructed data, resulting in command execution</desc>
+    </rule>
+
+    <rule rule_id="rasp_detect_php_process_preg_replace" type="Detection" author="xch">
+        <rule_name>Command Execution In preg_replace Function</rule_name>
+        <harm_level>critical</harm_level>
+        <filter part="runtime">php</filter>
+        <check_list>
+            <check_node part="class_id" type="EQU" check_data_type="static">0</check_node>
+            <check_node part="stack_trace" type="INCL" check_data_type="static"><![CDATA[: regexp code:]]></check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <append type="STATIC" append_field_name="alert_type">代码执行</append>
+        <append type="STATIC" append_field_name="alert_type_us"><![CDATA[Code Execution]]></append>
+        <append type="STATIC" append_field_name="attack_id_list">T1203</append>
+        <append type="STATIC" append_field_name="suggestion"><![CDATA[Find the behavior of executing commands through the preg_replace function, which may be WebShell or exploit behavior.
+Execution entrypoint can be confirmed through the alarm stack trace information.]]></append>
+        <modify></modify>
+        <del></del>
+        <action></action>
+        <desc affected_target="rasp">Unusual behavior of php preg_replace function for command execution</desc>
+    </rule>
+
+    <rule rule_id="rasp_detect_php_behinder_create_func" type="Detection" author="xch">
+        <rule_name>BeHinder WebShell Detect</rule_name>
+        <harm_level>critical</harm_level>
+        <filter part="runtime">php</filter>
+        <check_list>
+            <check_node part="stack_trace" type="INCL" check_data_type="static">FYOQaKiyqQNfDO(</check_node>
+        </check_list>
+        <alert_data>true</alert_data>
+        <append type="STATIC" append_field_name="alert_type">代码执行</append>
+        <append type="STATIC" append_field_name="alert_type_us"><![CDATA[Code Execution]]></append>
+        <append type="STATIC" append_field_name="attack_id_list">T1203</append>
+        <append type="STATIC" append_field_name="suggestion"><![CDATA[Known WebShell Stack Trace found.
+Execution entrypoint can be confirmed through the alarm stack trace information.]]></append>
+        <modify></modify>
+        <del></del>
+        <action></action>
+        <desc affected_target="rasp">BeHinder WebShell detect by PHP runtime stack trace</desc>
+    </rule>
+
+</root>
