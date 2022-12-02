@@ -78,11 +78,11 @@ Elkeid HUB 是一款由 Elkeid Team 维护的规则/事件处理引擎，支持�
 
 ## Getting Started
 - [Deploy By Elkeidup](https://github.com/bytedance/Elkeid/blob/main/elkeidup/README-zh_CN.md#elkeid-hub-单独部署)
-- [Elkeid HUB Quick Start](docs/quick_start/quick_start.md)
+- [Elkeid HUB Quick Start](docs/quick_start/quick_start_zh-CN.md)
 
 
 ## Elkeid HUB Handbook
-[Handbook](docs/handbook/handbook.md)
+[Handbook](docs/handbook/handbook-zh_CN.md)
 
 ## Demo Config
 [Demo](config/demo)
