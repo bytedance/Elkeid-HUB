@@ -21,7 +21,7 @@ Elkeid HUB 是一款由 Elkeid Team 维护的规则/事件处理引擎，支持�
 <img src="example_complex.png"/>
 
 
-## Advantage
+## Advantages
 * 高性能
 * 依赖极少
 * 支持复杂数据处理
@@ -30,31 +30,64 @@ Elkeid HUB 是一款由 Elkeid Team 维护的规则/事件处理引擎，支持�
 * 支持外部系统/数据联动
 
 ## Elkeid Internal Best Practices
-* 使用 Elkeid HUB 处理 Elkeid HIDS/RASP/Sandbox 原始数据，TPS 9千万/秒。HUB 调度实例 4000+
-* 99% 告警产生时间 < 0.5s
-* 内部维护策略2000+
+* 使用 Elkeid HUB 处理 Elkeid HIDS/RASP/Sandbox/K8s auditing 等原始数据，TPS 1.2亿条+/秒，HUB 调度实例 6000+
 
-## Community Version
-* 不支持集群模式，仅支持单节点
-* 没有前端支持，不支持数据可视化能力，不支持前端管理能力
-* 不支持 Rule/RuleSet/Project Debug 能力
-* 不支持 WorkSpace，不支持用户管理
-* 无运维管理能力
+## Elkeid-HUB Function List
+
+| Ability List     | Elkeid Community Edition | Elkeid Enterprise Edition |
+| ---------------- | ------------------------ | ------------------------- |
+| 流式数据处理     | :white_check_mark:       | :white_check_mark:        |
+| 数据输入输出能力 | :white_check_mark:       | :white_check_mark:        |
+| 完整前端支持     | :white_check_mark:       | :white_check_mark:        |
+| 监控能力         | :white_check_mark:       | :white_check_mark:        |
+| 插件支持         | :white_check_mark:       | :white_check_mark:        |
+| Debug支持        | :white_check_mark:       | :white_check_mark:        |
+| 离线数据处理     | :ng_man: | :white_check_mark:        |
+| 持久化能力       | :ng_man: | :white_check_mark:        |
+| Workspace        | :ng_man: | :white_check_mark:        |
+| 集群模式         | :ng_man: | :white_check_mark:        |
+| 在线升级策略     | :ng_man: | :white_check_mark:        |
+
+
+
+## Front-end Display (Community Edition)
+
+**Overview**
+<img src="docs/png/1.png" style="float:left;"/>
+
+
+
+**Edit Rule**
+<img src="docs/png/2.png" style="float:left;"/>
+
+
+
+**Edit HUB Project**
+<img src="docs/png/3.png" style="float:left;"/>
+
+
+
+**Edit HUB Python Plugin**
+<img src="docs/png/4.png" style="float:left;"/>
+
+
+
+**Submission Rules**
+<img src="docs/png/5.png" style="float:left;"/>
 
 
 ## Getting Started
-[Elkeid-HUB Quick Start](Elkeid-HUB_Quick_Start.md)
+- [Deploy By Elkeidup](https://github.com/bytedance/Elkeid/blob/main/elkeidup/README-zh_CN.md#elkeid-hub-单独部署)
+- [Elkeid HUB Quick Start](docs/quick_start/quick_start.md)
 
-[Elkeid-HUB Demo(Chinese version only)](demo.md)
 
-
-## Elkeid HUB Handbook (Chinese version only)
-[Handbook](handbook/handbook.md)
+## Elkeid HUB Handbook
+[Handbook](docs/handbook/handbook.md)
 
 ## Demo Config
 [Demo](config/demo)
 
-## Elkeid HIDS Rule and Project(Just Example)
+## Elkeid HIDS Rule and Project (Just Example)
 [Elkeid Project](config/elkeid_hids)
 
 (Need to use with [Elkeid](https://github.com/bytedance/Elkeid))

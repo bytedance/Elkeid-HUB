@@ -1,0 +1,280 @@
+<root ruleset_name="kube_alert_info" type="rule" undetected_discard="true" ruleset_id="kube_alert_info">
+
+	<!-- ........................................................... -->
+	<!--.............. authentication/authorization fail rules ......-->
+	<!--.............................................................-->
+	<rule rule_id="kube_anonymous_user_access_alert" author="elkeid" type="Detection">
+		<rule_name>anonymous_access</rule_name>
+		<alert_data>True</alert_data>
+		<harm_level>medium</harm_level>
+		<desc affected_target="kube">匿名用户访问</desc>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_anonymous_user_access</filter>
+		<check_list>
+		</check_list>
+		<action></action>
+		<modify>KubeAlertInfo</modify>
+		<append type="static" append_field_name="rule_version">1.9.1.0</append>
+		<append type="static" append_field_name="rule_name">anonymous_access</append>
+		<append type="static" append_field_name="rule_name_us">anonymous_access</append>
+		<append type="static" append_field_name="alert">true</append>
+		<append type="static" append_field_name="kube_rule_type">黑名单</append>
+		<append type="static" append_field_name="rule_type_1st">异常行为</append>
+		<append type="static" append_field_name="rule_type_2nd"><![CDATA[凭据滥用]]></append>
+		<append type="static" append_field_name="alert_type">试探入侵</append>
+		<append type="static" append_field_name="alert_type_us">initial_access</append>
+		<append type="static" append_field_name="attack_id">T1133</append>
+		<append type="static" append_field_name="risk_desc">An anonymous user access to the cluster is detected, and someone may conduct a detection attack on the cluster.</append>
+		<append type="static" append_field_name="suggestion">
+1. Use UserAgent, operation, request URI and other fields to determine whether the operation is a sensitive operation. If so, someone may be attacking the cluster. Please use the source IP field and the asset information associated with the IP to locate the identity of the initiator, and further Troubleshoot.
+2. If not, you can consider whitening it (Note: It is recommended to add whitening in combination with multiple fields to avoid false negatives)
+</append>
+	</rule>
+	<rule rule_id="kube_get_secrets_authentication_fail_alert" author="elkeid" type="Detection">
+		<rule_name>authentication_failed</rule_name>
+		<alert_data>True</alert_data>
+		<harm_level>low</harm_level>
+		<desc affected_target="kube">枚举/获取 secrets，认证失败</desc>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_get_secrets_authentication_fail</filter>
+		<check_list>
+		</check_list>
+		<action></action>
+		<modify>KubeAlertInfo</modify>
+		<append type="static" append_field_name="rule_version">1.9.1.0</append>
+		<append type="static" append_field_name="rule_name">authentication_failed</append>
+		<append type="static" append_field_name="rule_name_us">authentication_failed</append>
+		<append type="static" append_field_name="alert">true</append>
+		<append type="static" append_field_name="kube_rule_type">动态白名单</append>
+		<append type="static" append_field_name="rule_type_1st">异常行为</append>
+		<append type="static" append_field_name="rule_type_2nd"><![CDATA[认证/授权失败]]></append>
+		<append type="static" append_field_name="alert_type">试探入侵</append>
+		<append type="static" append_field_name="alert_type_us">initial_access</append>
+		<append type="static" append_field_name="attack_id">T1133</append>
+		<append type="static" append_field_name="risk_desc">Authentication failed when enumerating and obtaining the cluster secret dictionary (Secret). Attackers may try to obtain cluster secrets for subsequent attacks.</append>
+		<append type="static" append_field_name="suggestion">
+1. Please first judge whether it is a business, RD/operation and maintenance behavior based on the UserAgent, account/demo account and other fields of the client
+2. If it is a recurring expected behavior, and the security risk is judged to be controllable after investigation, you can consider whitewashing it (Note: It is recommended to combine multiple fields to whitewash to avoid false negatives)
+3. If it is an unexpected behavior, please use the source IP field and the asset information associated with the IP to locate the identity of the originator for further investigation
+</append>
+	</rule>
+	<rule rule_id="kube_get_secrets_authorization_fail_alert" author="elkeid" type="Detection">
+		<rule_name>authorization_failed</rule_name>
+		<alert_data>True</alert_data>
+		<harm_level>medium</harm_level>
+		<desc affected_target="kube">枚举/获取 secrets，授权失败</desc>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_get_secrets_authorization_fail</filter>
+		<check_list>
+		</check_list>
+		<action></action>
+		<modify>KubeAlertInfo</modify>
+		<append type="static" append_field_name="rule_name">authorization_failed</append>
+		<append type="static" append_field_name="rule_version">1.9.1.0</append>
+		<append type="static" append_field_name="rule_name_us">authorization_failed</append>
+		<append type="static" append_field_name="alert">true</append>
+		<append type="static" append_field_name="kube_rule_type">动态白名单</append>
+		<append type="static" append_field_name="rule_type_1st">异常行为</append>
+		<append type="static" append_field_name="rule_type_2nd"><![CDATA[认证/授权失败]]></append>
+		<append type="static" append_field_name="alert_type">试探入侵</append>
+		<append type="static" append_field_name="alert_type_us">initial_access</append>
+		<append type="static" append_field_name="attack_id">T1133</append>
+		<append type="static" append_field_name="risk_desc">Authorization failed when enumerating and obtaining the cluster secret dictionary (Secret). An attacker may try to obtain secrets for subsequent attacks.</append>
+		<append type="static" append_field_name="suggestion">
+1. Please first judge whether it is a business, RD/operation and maintenance behavior based on the UserAgent, account/demo account and other fields of the client
+2. If it is a recurring expected behavior, and the security risk is judged to be controllable after investigation, you can consider whitewashing it (Note: It is recommended to combine multiple fields to whitewash to avoid false negatives)
+3. If it is an unexpected behavior, please use the source IP field and the asset information associated with the IP to locate the identity of the originator for further investigation
+</append>
+	</rule>
+
+
+	<!-- ........................................................... -->
+	<!--.......................... pod/exec rules ...................-->
+	<!--.............................................................-->
+
+	<rule rule_id="kube_pods_exec_regular_command_alert" author="elkeid" type="Detection">
+		<rule_name>command_execution</rule_name>
+		<alert_data>True</alert_data>
+		<harm_level>medium</harm_level>
+		<desc affected_target="kube">与 API Server 交互，在 pods 内执行命令</desc>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_pods_exec_regular_command</filter>
+		<check_list>
+		</check_list>
+		<action></action>
+		<modify>KubeAlertInfo</modify>
+		<append type="static" append_field_name="rule_version">1.9.1.0</append>
+		<append type="static" append_field_name="rule_name">command_execution</append>
+		<append type="static" append_field_name="rule_name_us">command_execution</append>
+		<append type="static" append_field_name="alert">true</append>
+		<append type="static" append_field_name="kube_rule_type">动态白名单</append>
+		<append type="static" append_field_name="rule_type_1st">异常行为</append>
+		<append type="static" append_field_name="rule_type_2nd">外部代码执行</append>
+		<append type="static" append_field_name="alert_type">代码执行</append>
+		<append type="static" append_field_name="alert_type_us">execution</append>
+		<append type="static" append_field_name="attack_id">T1609</append>
+		<append type="static" append_field_name="risk_desc">Execute arbitrary commands (create interactive bash, execute other commands) in the container through pods/exec (that is, the subresource corresponding to kubectl exec). Attackers may create pods/exec subresources to execute arbitrary commands in containers, enabling lateral movement attacks, credential theft, and more.</append>
+		<append type="static" append_field_name="suggestion">
+1. Please first confirm whether it is the expected business behavior through fields such as UserAgent, account/demo account, and command content
+2. If it is a recurring expected behavior, and the security risk is judged to be controllable after investigation, you can consider whitewashing it (Note: It is recommended to combine multiple fields to whitewash to avoid false negatives)
+3. If it is an unexpected behavior, please use the source IP field and the asset information associated with the IP to locate the identity of the originator for further investigation
+</append>
+	</rule>
+
+	<!-- ........................................................... -->
+	<!--....................... abuse_credential rules ..............-->
+	<!--.............................................................-->
+	<rule rule_id="kube_abuse_serviceaccount_with_kubectl_alert" author="elkeid" type="Detection">
+		<rule_name>credential_abuse</rule_name>
+		<alert_data>True</alert_data>
+		<harm_level>critical</harm_level>
+		<desc affected_target="kube">利用 kubectl 滥用 ServiceAccount</desc>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_abuse_serviceaccount_with_kubectl</filter>
+		<check_list>
+		</check_list>
+		<action></action>
+		<modify>KubeAlertInfo</modify>
+		<append type="static" append_field_name="rule_version">1.9.1.0</append>
+		<append type="static" append_field_name="rule_name_us">credential_abuse</append>
+		<append type="static" append_field_name="alert">true</append>
+		<append type="static" append_field_name="rule_name">credential_abuse</append>
+		<append type="static" append_field_name="kube_rule_type">黑名单</append>
+		<append type="static" append_field_name="rule_type_1st">异常行为</append>
+		<append type="static" append_field_name="rule_type_2nd">凭据滥用</append>
+		<append type="static" append_field_name="alert_type">试探入侵</append>
+		<append type="static" append_field_name="alert_type_us">initial_access</append>
+		<append type="static" append_field_name="attack_id">T1078,T1133</append>
+		<append type="static" append_field_name="risk_desc">Access the kube API Server as the SA account through the kubectl client tool. After the attacker steals a certain SA token, he then uses the kubectl tool to send a request to the API Server with the stolen token to attack.</append>
+		<append type="static" append_field_name="suggestion">
+1. Please confirm whether it is the expected business behavior through fields such as UserAgent, account/demo account, action, resource, etc.
+2. If it is a recurring expected behavior, and the security risk is judged to be controllable after investigation, you can consider whitewashing it (Note: It is recommended to combine multiple fields to whitewash to avoid false negatives)
+3. If it is an unexpected behavior, please use the source IP field and the asset information associated with the IP to locate the identity of the originator for further investigation
+</append>
+	</rule>
+
+	<!-- ........................................................... -->
+	<!--.................... create workloads rules .................-->
+	<!--.............................................................-->
+
+	<!-- ........................................................... -->
+	<!-- ................. privileged Workloads  ................... -->
+	<!-- ........................................................... -->
+1	<rule rule_id="kube_create_privileged_workloads_alert" author="elkeid" type="Detection">
+		<rule_name>privileged_container</rule_name>
+		<alert_data>True</alert_data>
+		<harm_level>critical</harm_level>
+		<desc affected_target="kube">创建具有特权容器的工作负载</desc>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_privileged_</filter>
+		<check_list>
+		</check_list>
+		<action></action>
+		<modify>KubeAlertInfo</modify>
+		<append type="static" append_field_name="rule_version">1.9.1.0</append>
+		<append type="static" append_field_name="rule_name">privileged_container</append>
+		<append type="static" append_field_name="alert">true</append>
+		<append type="static" append_field_name="kube_rule_type">黑名单</append>
+		<append type="static" append_field_name="rule_type_1st">威胁资源</append>
+		<append type="static" append_field_name="rule_type_2nd">Workloads 部署</append>
+		<append type="static" append_field_name="alert_type">提权攻击</append>
+		<append type="static" append_field_name="alert_type_us">privilege_escalation</append>
+		<append type="static" append_field_name="attack_id">T1610,T1611</append>
+		<append type="static" append_field_name="risk_desc">Privileged container creation detected. An attacker could potentially move laterally and gain control of a host machine by creating privileged containers. When a business deploys a service, it may also create a privileged container. If the container is attacked, it can easily escape, so it is not necessary to create it.</append>
+		<append type="static" append_field_name="suggestion">
+1. Please first confirm whether it is the expected business behavior through fields such as UserAgent, account/demo account
+2. If it is a recurring expected behavior, and the security risk is judged to be controllable after investigation, you can consider whitewashing it (Note: It is recommended to combine multiple fields to whitewash to avoid false negatives)
+3. If it is an unexpected behavior, please use the source IP field and the asset information associated with the IP to locate the identity of the originator for further investigation
+</append>
+	</rule>
+
+
+	<!-- ........................................................... -->
+	<!-- ............... mount sensitive host paths  ............... -->
+	<!-- ........................................................... -->
+	<rule rule_id="kube_create_readwrite_mounted_host_path_workloads_alert" author="elkeid" type="Detection">
+		<rule_name>mount_sensitive_host_file</rule_name>
+		<alert_data>True</alert_data>
+		<harm_level>critical</harm_level>
+		<desc affected_target="kube">创建挂载宿主机敏感文件的工作负载</desc>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_mounted_host_path_workloads_readwrite</filter>
+		<check_list>
+		</check_list>
+		<action></action>
+		<modify>KubeAlertInfo</modify>
+		<append type="static" append_field_name="rule_version">1.9.1.0</append>
+		<append type="static" append_field_name="rule_name">mount_sensitive_host_file</append>
+		<append type="static" append_field_name="rule_name_us">mount_sensitive_host_file</append>
+		<append type="static" append_field_name="alert">true</append>
+		<append type="static" append_field_name="kube_rule_type">黑名单</append>
+		<append type="static" append_field_name="rule_type_1st">威胁资源</append>
+		<append type="static" append_field_name="rule_type_2nd">Workloads 部署</append>
+		<append type="static" append_field_name="alert_type">提权攻击</append>
+		<append type="static" append_field_name="alert_type_us">privilege_escalation</append>
+		<append type="static" append_field_name="attack_id">T1610,T1611</append>
+		<append type="static" append_field_name="risk_desc">The created container mounts sensitive directories or files on the host, such as the root directory, /proc directory, etc. Attackers may create containers that mount sensitive directories and files on the host to elevate permissions, gain control of the host, and evade detection.</append>
+		<append type="static" append_field_name="suggestion">
+1. Please first confirm whether it is the expected business behavior through fields such as UserAgent, account/demo account
+2. If it is a recurring expected behavior, and the security risk is judged to be controllable after investigation, you can consider whitewashing it (Note: It is recommended to combine multiple fields to whitewash to avoid false negatives)
+3. If it is an unexpected behavior, please use the source IP field and the asset information associated with the IP to locate the identity of the originator for further investigation</append>
+	</rule>
+
+    <!-- ........................................................... -->
+	<!--......................... kube rbac rules ....................-->
+	<!--.............................................................-->
+	<rule rule_id="kube_create_insecure_clusterrolebinding_alert" author="elkeid" type="Detection">
+		<rule_name>create_insecure_clusterrolebinding</rule_name>
+		<alert_data>True</alert_data>
+		<harm_level>high</harm_level>
+		<desc affected_target="kube">创建绑定大权限 ClusterRole 的 ClusterRoleBinding</desc>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_insecure_clusterrolebinding</filter>
+		<check_list>
+		</check_list>
+		<action></action>
+		<modify>KubeAlertInfo</modify>
+		<append type="static" append_field_name="rule_version">1.9.1.0</append>
+		<append type="static" append_field_name="rule_name">create_insecure_clusterrolebinding</append>
+		<append type="static" append_field_name="rule_name_us">create_insecure_clusterrolebinding</append>
+		<append type="static" append_field_name="alert">true</append>
+		<append type="static" append_field_name="kube_rule_type">黑名单</append>
+		<append type="static" append_field_name="rule_type_1st">威胁资源</append>
+		<append type="static" append_field_name="rule_type_2nd"><![CDATA[RoleBinding/ClusterRoleBinding 创建]]></append>
+		<append type="static" append_field_name="alert_type">后门驻留</append>
+		<append type="static" append_field_name="alert_type_us">persistent</append>
+		<append type="static" append_field_name="attack_id">T1078</append>
+		<append type="static" append_field_name="risk_desc">The created ClusterRoleBinding is bound to a sensitive ClusterRole, that is, a user, user group or service account is given the permissions of a sensitive ClusterRole. An attacker may create a ClusterRoleBinding that binds a ClusterRole with a large authority for persistence and concealment. Cluster administrators or operation and maintenance personnel may also create a ClusterRoleBinding that binds a ClusterRole with large permissions due to insufficient security awareness. According to the principle of privilege minimization and kube security attack and defense practices, this type of ClusterRoleBinding will introduce greater security risks to the cluster, so it should be avoided as much as possible.</append>
+		<append type="static" append_field_name="suggestion">
+1. Please first judge whether it is a business, RD/operation and maintenance behavior based on the UserAgent, account/demo account and other fields of the client
+2. If the operation and maintenance personnel are performing role binding, you can set the alarm as processed
+3. If it is a recurring expected behavior, and the security risk is judged to be controllable after investigation, you can consider adding white to it (Note: It is recommended to add white to multiple fields to avoid false negatives) 4. If it is an unexpected behavior , please use the source IP field and the asset information associated with the IP to locate the identity of the originator for further investigation
+</append>
+	</rule>
+
+
+
+	<!-- ........................................................... -->
+	<!--....................... CVE-2020-8554 .......................-->
+	<!--.............................................................-->
+
+	<rule rule_id="kube_create_externalIPs_service_alert" author="elkeid" type="Detection">
+		<rule_name>Suspected CVE-2020-8554</rule_name>
+		<alert_data>True</alert_data>
+		<harm_level>high</harm_level>
+		<desc affected_target="kube">疑似存在通过创建、更新 Service 的 externalIPs 来利用 CVE-2020-8554 的利用行为</desc>
+		<filter part="SMITH_ALERT_DATA.RULE_INFO.RuleID">kube_create_externalIPs_service</filter>
+		<check_list>
+		</check_list>
+		<action></action>
+		<modify>KubeAlertInfo</modify>
+		<append type="static" append_field_name="rule_version">1.9.1.0</append>
+		<append type="static" append_field_name="rule_name">Suspected CVE-2020-8554</append>
+		<append type="static" append_field_name="rule_name_us">Suspected CVE-2020-8554</append>
+		<append type="static" append_field_name="alert">true</append>
+		<append type="static" append_field_name="kube_rule_type">黑名单</append>
+		<append type="static" append_field_name="rule_type_1st">漏洞利用行为</append>
+		<append type="static" append_field_name="rule_type_2nd"></append>
+		<append type="static" append_field_name="alert_type">信息搜集</append>
+		<append type="static" append_field_name="alert_type_us">collection</append>
+		<append type="static" append_field_name="attack_id">T1557</append>
+		<append type="static" append_field_name="risk_desc">Detected exploit signature of CVE-2020-8554 - create, update Service and set externalIPs. One of the ways to exploit this vulnerability is to set malicious spec.externalIPs when creating and updating a Service to achieve a man-in-the-middle attack. In practice, the ExternalIP property of Service is rarely used. Therefore, when this behavior occurs, operators need to further verify whether the ExternalIP is a legal IP address.</append>
+		<append type="static" append_field_name="suggestion">
+1. Please first confirm whether it is the expected business behavior through fields such as UserAgent, account/demo account, and the value of requestObject.spec.externalIPs in the original log
+2. If it is a recurring expected behavior, and the security risk is judged to be controllable after investigation, you can consider whitewashing it (Note: It is recommended to combine multiple fields to whitewash to avoid false negatives)
+3. If it is an unexpected behavior, please use the source IP field and the asset information associated with the IP to locate the identity of the originator for further investigation
+</append>
+	</rule>
+</root>

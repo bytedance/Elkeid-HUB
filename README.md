@@ -31,33 +31,70 @@ Elkeid HUB is a rule/event processing engine maintained by the Elkeid Team that 
 * Support External System/Data Linkage
 
 ## Elkeid Internal Best Practices
-* Use Elkeid HUB to process Elkeid HIDS/RASP/Sandbox/etc. raw data, TPS ninety million/s. HUB scheduling instance 4000+
+* Use Elkeid HUB to process Elkeid HIDS/RASP/Sandbox/K8s auditing etc. raw data, TPS 120+ million/s. HUB scheduling instance 6000+
 * 99% alarm produce time is less than 0.5s
 * Internal Maintenance Rules 2000+
 
+## Elkeid-HUB Function List
 
-## Getting Started
-[Elkeid-HUB Quick Start](Elkeid-HUB_Quick_Start.md)
+| Ability List                  | Elkeid Community Edition | Elkeid Enterprise Edition |
+| ----------------------------- | ------------------------ | ------------------------- |
+| Streaming data processing     | :white_check_mark:       | :white_check_mark:        |
+| Data input, output capability | :white_check_mark:       | :white_check_mark:        |
+| Full frontend support         | :white_check_mark:       | :white_check_mark:        |
+| Monitoring capability         | :white_check_mark:       | :white_check_mark:        |
+| Plugin support                | :white_check_mark:       | :white_check_mark:        |
+| Debug support                 | :white_check_mark:       | :white_check_mark:        |
+| Offline data processing       | :ng_man:                 | :white_check_mark:        |
+| Data Persistence capability   | :ng_man:                 | :white_check_mark:        |
+| Workspace                     | :ng_man:                 | :white_check_mark:        |
+| Cluster mode                  | :ng_man:                 | :white_check_mark:        |
+| Online upgrade strategy       | :ng_man:                 | :white_check_mark:        |
 
-[Elkeid-HUB Demo(Chinese version only)](demo.md)
 
-## Elkeid HUB Handbook (chinese only)
-[Handbook](handbook/handbook.md)
+
+## Front-end Display (Community Edition)
+
+**Overview**
+<img src="docs/png/1_en.png" style="float:left;"/>
+
+
+
+**Edit Rule**
+<img src="docs/png/2_en.png" style="float:left;"/>
+
+
+
+**Edit HUB Project**
+<img src="docs/png/3_en.png" style="float:left;"/>
+
+
+
+**Edit HUB Python Plugin**
+<img src="docs/png/4_en.png" style="float:left;"/>
+
+
+
+**Submission Rules**
+<img src="docs/png/5_en.png" style="float:left;"/>
+
+
+
+
+## Getting Started (Chinese version only)
+- [Deploy By Elkeidup](https://github.com/bytedance/Elkeid/blob/main/elkeidup/README-zh_CN.md#elkeid-hub-单独部署)
+- [Elkeid HUB Quick Start](docs/quick_start/quick_start.md)
+
+## Elkeid HUB Handbook (Chinese version only)
+[Handbook](docs/handbook/handbook.md)
 
 ## Demo Config
 [Demo](config/demo)
 
-## Elkeid HIDS Rule and Project(Just Example)
+## Elkeid HIDS Rule and Project (Just Example)
 [Elkeid Project](config/elkeid_hids)
 
 (Need to use with [Elkeid](https://github.com/bytedance/Elkeid))
-
-## Community Version
-* Does not support cluster mode, only supports single node.
-* No front-end support, no data visualization capabilities, no front-end management capabilities.
-* Rule/RuleSet/Project Debug capabilities are not supported.
-* WorkSpace is not supported, user management is not supported.
-* No operation and maintenance management capabilities.
 
 ## LICENSE (Not Business Friendly)
 [LICENSE](LICENSE)

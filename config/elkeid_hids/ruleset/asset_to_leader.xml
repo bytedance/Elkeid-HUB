@@ -1,0 +1,31 @@
+<root ruleset_id="asset_to_leader" ruleset_name="asset_to_leader" type="Rule" undetected_discard="true">
+  <rule rule_id="rasp_hb" type="Detection" author="yaopengbo">
+    <rule_name>rasp_hb</rule_name>
+    <harm_level>info</harm_level>
+    <filter part="data_type">2997</filter>
+    <check_list>
+      <check_node part="environ" type="ISEXIST" check_data_type="static"></check_node>
+    </check_list>
+    <alert_data>false</alert_data>
+    <append type="CUSTOM" rely_part="environ" append_field_name="environ_json">StringToJson</append>
+    <modify></modify>
+    <del>environ</del>
+    <action>PushAssetToLeader</action>
+    <desc affected_target="HTTP">rasp_hb</desc>
+  </rule>
+  <rule rule_id="rasp_hb_type_one_redir" type="Detection" author="xch">
+    <rule_name>rasp_hb</rule_name>
+    <harm_level>info</harm_level>
+    <filter part="data_type">2439</filter>
+    <check_list>
+      <check_node part="message_type" type="EQU" check_data_type="static">1</check_node>
+      <check_node part="block" type="ISEXIST" check_data_type="static"></check_node>
+    </check_list>
+    <alert_data>false</alert_data>
+    <append type="STATIC" append_field_name="data_type">2996</append>
+    <modify></modify>
+    <del></del>
+    <action>PushAssetToLeader</action>
+    <desc affected_target="HTTP">rasp_hb</desc>
+  </rule>
+</root>

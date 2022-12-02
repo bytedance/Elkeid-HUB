@@ -1,0 +1,7 @@
+ProjectID: rasp
+ProjectName: rasp
+SmithDSL: |
+  INPUT.hids --> RULESET.rasp_handle_rawdata
+  RULESET.rasp_handle_rawdata --> RULESET.rasp_detect
+  RULESET.rasp_handle_rawdata --> RULESET.asset_to_leader
+  RULESET.rasp_detect  --> RULESET.push_rasp_alert
